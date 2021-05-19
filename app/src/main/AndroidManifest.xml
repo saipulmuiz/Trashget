@@ -14,21 +14,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trashget">
-        <activity android:name=".people.PeopleActivity"></activity>
+        <activity android:name=".people.PeopleActivity" />
         <activity android:name=".people.PeopleLogin" />
         <activity android:name=".admin.AddDriver" />
-        <activity android:name=".admin.AdminActivity" />
+        <activity android:name=".admin.AdminActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".admin.AdminLogin" />
         <activity android:name=".collector.GetRequest" />
         <activity android:name=".people.GetLocation" />
         <activity
             android:name=".collector.TrackTruck"
             android:label="@string/title_activity_track_truck">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".collector.CollectorActivity" />
         <activity android:name=".collector.CollectorLogin" />
