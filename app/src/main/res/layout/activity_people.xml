@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".people.PeopleActivity">
+
+    <!--<ImageView-->
+    <!--android:id="@+id/imageView3"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginTop="0dp"-->
+    <!--app:srcCompat="@drawable/two" />-->
+
+    <TextView
+        android:text="Username"
+        android:layout_marginLeft="50dp"
+        android:textStyle="bold"
+
+        android:layout_marginTop="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <EditText
+        android:layout_centerHorizontal="true"
+        android:id="@+id/name"
+        android:layout_marginTop="100dp"
+        android:hint="Enter the name"
+        android:layout_width="300dp"
+
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/textv"
+        android:layout_width="300dp"
+        android:layout_marginTop="220dp"
+        android:layout_centerHorizontal="true"
+        android:text="Please click the below button\n to get your location"
+        android:layout_height="wrap_content"
+        />
+    <Button
+        android:id="@+id/getlocbt"
+        android:layout_width="200dp"
+        android:layout_marginTop="350dp"
+        android:layout_centerHorizontal="true"
+        android:text="Get Garbage Location"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:background="#cf1020"/>
+    <Button
+        android:id="@+id/submitbt"
+        android:layout_marginTop="450dp"
+        android:layout_width="200dp"
+        android:text="submit"
+        android:textColor="#ffffff"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:background="#cf1020"/>
+
+</RelativeLayout>

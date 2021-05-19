@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "84997284654",
+    "project_id": "apesh-app",
+    "storage_bucket": "apesh-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84997284654:android:ae0f2c374f8c49a6e890bf",
+        "android_client_info": {
+          "package_name": "com.cektrend.trashget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84997284654-bipu25r315cgflja1tm1udm2rvq53e19.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cektrend.trashget",
+            "certificate_hash": "26b5f1ded862654c09fa2f144e8e9b600ef8bdde"
+          }
+        },
+        {
+          "client_id": "84997284654-4l9s0e3234oqui937deqrfkjq7k2sj40.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6oq6nT7NQGPcEY5GAC09nBhL14xVduxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84997284654-4l9s0e3234oqui937deqrfkjq7k2sj40.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

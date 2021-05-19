@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".admin.AdminActivity">
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.tomtom.online.sdk.map.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/floatingActionMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu_animationDelayPerItem="35"
+        app:menu_backgroundColor="@color/transparent"
+        app:menu_buttonSpacing="0dp"
+        app:menu_colorNormal="#da3e21"
+        app:menu_colorPressed="#dc4b3f"
+        app:menu_fab_show_animation="@anim/fab_slide_in_from_right"
+        app:menu_fab_size="normal"
+        app:menu_icon="@drawable/fab_add"
+        app:menu_labels_colorNormal="#ffffff"
+        app:menu_labels_cornerRadius="18dp"
+        app:menu_labels_ellipsize="none"
+        app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        app:menu_labels_maxLines="-1"
+        app:menu_labels_position="right"
+        app:menu_labels_singleLine="false"
+        app:menu_labels_textColor="#1A1A1A"
+        app:menu_labels_textSize="15sp"
+        app:menu_openDirection="down"
+        app:menu_shadowColor="#cf1020"
+        app:menu_shadowRadius="4dp"
+        app:menu_shadowXOffset="1dp"
+        app:menu_showShadow="false">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/adddriver1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="Add Driver"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/setgarbage1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="Set Garbage"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/addgarbage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="Add Garbage"
+            app:fab_size="mini" />
+    </com.github.clans.fab.FloatingActionMenu>
+
+    <CheckBox
+        android:id="@+id/checkremove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="15dp"
+        android:checked="false"
+        android:text="Remove garbage"
+        android:textColor="#cf1020"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/floatingActionMenu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/floatingActionMenu" />
+    <!--<Button-->
+    <!--android:id="@+id/garbage"-->
+    <!--android:layout_marginTop="50dp"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:text="Add Garbage"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+    <!--<Button-->
+    <!--android:id="@+id/setgarbage"-->
+    <!--android:layout_marginTop="150dp"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:text="set Garbage"-->
+
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+    <!--<Button-->
+    <!--android:id="@+id/adddriver"-->
+    <!--android:text="Add driver"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_marginTop="250dp"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
