@@ -59,6 +59,7 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
     TomtomMap tom;
     int count2 = 0;
     Button bt, bt1;
+    TextView textView, textView1, textView2;
     static LatLng start, stop;
     double latitude, longitude;
     //    Button bt2;
@@ -80,7 +81,6 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
     private Icon departureIcon;
     static String bask, user;
     private Icon destinationIcon;
-    TextView textView, textView1, textView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,7 +250,6 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
                     //basket.markerBalloon(new SimpleMarkerBalloon(address+"\n"+city));
                     if (TrackTruck.user != null && TrackTruck.bask != null) {
                         textView1.setText("" + TrackTruck.user + " to" + TrackTruck.bask);
-
                     }
                     Log.e("address", address);
                     if (count == 0) {
