@@ -1,10 +1,13 @@
 package com.cektrend.trashget.adapter;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,16 +15,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cektrend.trashget.Interface.NameValue;
 import com.cektrend.trashget.R;
 import com.cektrend.trashget.Track;
-import com.cektrend.trashget.collector.TruckList;
+import com.cektrend.trashget.data.TruckList;
 
 import java.util.List;
 
 public class TruckListAdapter extends RecyclerView.Adapter<com.cektrend.trashget.adapter.TruckListAdapter.ViewHolder> {
     Track track;
     NameValue nameValue;
-    public TruckListAdapter(List<TruckList> list) {
+    public List<TruckList> list;
+
+    public TruckListAdapter(List<TruckList> list, Context context) {
         this.list = list;
+        this.context = context;
     }
+
+    private Context context;
 
     public void setTrack(Track t) {
         this.track = t;
@@ -31,8 +39,6 @@ public class TruckListAdapter extends RecyclerView.Adapter<com.cektrend.trashget
         this.nameValue = nameValue;
     }
 
-    public List<TruckList> list;
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -40,27 +46,44 @@ public class TruckListAdapter extends RecyclerView.Adapter<com.cektrend.trashget
         return new ViewHolder(view);
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView head, body, collectorId;
+        Button btnTrack, btnNotify;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            collectorId = itemView.findViewById(R.id.tv_collector_id);
+            head = itemView.findViewById(R.id.tv_headname);
+            head = itemView.findViewById(R.id.tv_headname);
+            body = itemView.findViewById(R.id.tv_bodymobile);
+            btnTrack = itemView.findViewById(R.id.btn_track);
+            btnNotify = itemView.findViewById(R.id.btn_notify);
+        }
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         TruckList truckList = list.get(i);
-        viewHolder.head.setText(truckList.getHead());
-        viewHolder.body.setText(truckList.getBody());
-        viewHolder.bt.setOnClickListener(new View.OnClickListener() {
+        viewHolder.collectorId.setText(new StringBuilder("Id Customer : " + truckList.getId()));
+        viewHolder.head.setText(truckList.getName());
+        viewHolder.body.setText(truckList.getPhone());
+        viewHolder.btnTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (track != null) {
-                    String name = viewHolder.head.getText().toString();
-                    track.track(name);
+                    // Toast.makeText(context, truckList.getId() + " track di klik!", Toast.LENGTH_SHORT).show();
+                    track.track(truckList.getId());
                 }
             }
         });
-        viewHolder.bt1.setOnClickListener(new View.OnClickListener() {
+        viewHolder.btnNotify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = viewHolder.head.getText().toString();
-                if (nameValue != null) {
-                    nameValue.notifyme(username);
-                }
+                // String username = viewHolder.head.getText().toString();
+                // if (nameValue != null) {
+                //     nameValue.notifyme(username);
+                // }
+                Toast.makeText(context, truckList.getId() + " notifyme di klik!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -68,17 +91,5 @@ public class TruckListAdapter extends RecyclerView.Adapter<com.cektrend.trashget
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView head, body;
-        Button bt, bt1;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            head = itemView.findViewById(R.id.headname);
-            body = itemView.findViewById(R.id.bodymobile);
-            bt = itemView.findViewById(R.id.trackbt);
-            bt1 = itemView.findViewById(R.id.notify);
-        }
     }
 }

@@ -1,4 +1,4 @@
-package com.cektrend.trashget.people;
+package com.cektrend.trashget.customer;
 
 import androidx.appcompat.app.AppCompatActivity;
 

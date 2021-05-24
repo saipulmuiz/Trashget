@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "84997284654",
+    "firebase_url": "https://apesh-app-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "apesh-app",
     "storage_bucket": "apesh-app.appspot.com"
   },

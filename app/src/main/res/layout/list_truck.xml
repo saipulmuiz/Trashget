@@ -1,53 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_margin="40dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/shape_rounded_main_card"
         card_view:cardCornerRadius="4dp">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/headname"
+                android:id="@+id/tv_collector_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="20dp"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                card_view:layout_constraintBottom_toTopOf="@+id/tv_headname"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
+                tools:text="858495" />
 
             <TextView
-                android:id="@+id/bodymobile"
+                android:id="@+id/tv_headname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:textAlignment="center" />
+                android:layout_below="@id/tv_collector_id"
+                android:layout_marginTop="10dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                card_view:layout_constraintBottom_toTopOf="@+id/tv_bodymobile"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/tv_collector_id"
+                tools:text="Muiz" />
+
+            <TextView
+                android:id="@+id/tv_bodymobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_headname"
+                android:layout_marginTop="10dp"
+                android:textAlignment="center"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/tv_headname"
+                tools:text="859489549" />
 
             <Button
-                android:id="@+id/trackbt"
+                android:id="@+id/btn_track"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="20dp"
-                android:text="Track" />
+                android:layout_marginTop="20dp"
+                android:text="Track"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toStartOf="@+id/btn_notify"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/tv_bodymobile" />
 
             <Button
-                android:id="@+id/notify"
+                android:id="@+id/btn_notify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginRight="20dp"
-                android:text="Notify" />
+                android:text="Notify"
+                card_view:layout_constraintBottom_toBottomOf="@+id/btn_track"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toEndOf="@+id/btn_track"
+                card_view:layout_constraintTop_toTopOf="@+id/btn_track" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".people.GetLocation">
+    tools:context=".customer.GetLocation">
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.tomtom.online.sdk.map.MapFragment"

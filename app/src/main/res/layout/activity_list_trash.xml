@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EFEFEF"
-    tools:context=".customer.GetRequest">
+    tools:context=".admin.ListTrashActivity">
 
     <include
-        android:id="@+id/toolbar_collector_list"
+        android:id="@+id/toolbar_trash_list"
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -17,7 +17,7 @@
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_collector_list">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_trash_list">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
@@ -28,7 +28,7 @@
             android:fitsSystemWindows="true">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_collector"
+                android:id="@+id/rv_trash"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
@@ -39,7 +39,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/list_truck" />
+                tools:listitem="@layout/list_trash" />
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Vibrator;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -21,17 +22,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.cektrend.trashget.MainActivity;
 import com.cektrend.trashget.R;
+import com.cektrend.trashget.data.DataTrash;
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tomtom.online.sdk.common.location.LatLng;
 import com.tomtom.online.sdk.map.Icon;
 import com.tomtom.online.sdk.map.MapConstants;
@@ -44,17 +43,16 @@ import com.tomtom.online.sdk.map.SimpleMarkerBalloon;
 import com.tomtom.online.sdk.map.TomtomMap;
 import com.tomtom.online.sdk.map.TomtomMapCallback;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.cektrend.trashget.collector.GetRequest.latitude;
 import static com.tomtom.online.sdk.map.MapConstants.DEFAULT_ZOOM_LEVEL;
 
-public class AdminActivity extends AppCompatActivity implements OnMapReadyCallback, TomtomMapCallback.OnMarkerClickListener {
+public class AdminActivity extends AppCompatActivity implements OnMapReadyCallback, TomtomMapCallback.OnMarkerClickListener, View.OnClickListener {
+    private static final int MY_REQUEST_CODE_PERMISSION_FINE_LOCATION = 1000;
+    private static final int MY_REQUEST_CODE_PERMISSION_COARSE_LOCATION = 2000;
     TomtomMap tom;
     int count = 0;
     int count2 = 0;
@@ -66,178 +64,115 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
     MarkerBuilder markerBuilder;
     Vibrator vibrator;
     CheckBox checkBox;
-    FloatingActionButton addgarbage, setgarbage, adddriver1;
-
-    @Override
-    public void onBackPressed() {
-
-        LatLng latLng = new LatLng(20.5937, 78.9629);
-        if (count1 == 0) {
-            tom.centerOn(
-                    latLng.getLatitude(), latLng.getLongitude(),
-                    3.0,
-                    MapConstants.ORIENTATION_NORTH);
-            count1++;
-        } else {
-            Intent intent = new Intent(AdminActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-    }
+    FloatingActionButton addGarbage, setGarbage, addDriver, showData;
+    DatabaseReference dbTrash;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
-        //      bt=findViewById(R.id.garbage);
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        addgarbage = findViewById(R.id.addgarbage);
-        setgarbage = findViewById(R.id.setgarbage1);
-        adddriver1 = findViewById(R.id.adddriver1);
-//bt1=findViewById(R.id.setgarbage);
-        checkBox = findViewById(R.id.checkremove);
-        //adddriver=findViewById(R.id.adddriver);
-        adddriver1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AdminActivity.this, AddDriver.class);
-                startActivity(intent);
-            }
-        });
+        dbTrash = FirebaseDatabase.getInstance().getReference();
+        initComponents();
+        initiClickListener();
+    }
 
+    private void initComponents() {
+        // bt=findViewById(R.id.garbage);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        addGarbage = findViewById(R.id.addgarbage);
+        setGarbage = findViewById(R.id.setgarbage);
+        addDriver = findViewById(R.id.adddriver);
+        showData = findViewById(R.id.showdata);
+        // bt1=findViewById(R.id.setgarbage);
+        checkBox = findViewById(R.id.checkremove);
         MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
         mapFragment.getAsyncMap(this);
-        addgarbage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                temp = 1;
-                Toast.makeText(getApplicationContext(), "Drag the marker and click set garbage", Toast.LENGTH_LONG).show();
-                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                LocationListener locationListener = new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        latitude = location.getLatitude();
-                        longitude = location.getLongitude();
-                        LatLng latLng = new LatLng(latitude, longitude);
-                        if (count == 0) {
-//                         int height = 100;
-//                         int width = 100;
-//                         BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.gar);
-//                         Bitmap b=bitmapdraw.getBitmap();
-//                         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                            MarkerBuilder markerBuilder = new MarkerBuilder(latLng).decal(true).draggable(true)
-                                    .markerBalloon(new SimpleMarkerBalloon("garbage"))
-                                    .iconAnchor(MarkerAnchor.Bottom);
-
-                            tom.addMarker(markerBuilder);
-                            count++;
-                        }
-                        Log.e("latt", String.valueOf(latitude));
-                        Log.e("long", String.valueOf(longitude));
-                    }
-
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-                    }
-
-                    @Override
-                    public void onProviderEnabled(String provider) {
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String provider) {
-                    }
-                };
-
-                if (ActivityCompat.checkSelfPermission(AdminActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(AdminActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-
-                //LatLng latLng=new LatLng(13.0827,80.2707);]
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                        2000,
-                        10, locationListener);
-            }
-        });
-        setgarbage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (AdminActivity.latitude != 0 && AdminActivity.longitude != 0) {
-                    if (temp == 1) {
-                        insertvalues(AdminActivity.latitude, AdminActivity.longitude);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Click the ADD GARBAGE first", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            }
-        });
     }
 
-    private void addgarbage(TomtomMap tomtomMap) {
-        String url = "http://fundevelopers.website/TomTom/garbageget.php";
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                int count = 0;
-                while (count < response.length()) {
-                    try {
-                        JSONObject jsonObject = response.getJSONObject(count);
-                        String marklatitude = jsonObject.getString("latitude");
-                        String marklongitude = jsonObject.getString("longitude");
-                        //String string=new String();
-                        AdminActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                double lat = Double.parseDouble(marklatitude);
-                                double lang = Double.parseDouble(marklongitude);
-                                LatLng latLng1 = new LatLng(lat, lang);
-                                markerBuilder = new MarkerBuilder(latLng1).markerBalloon(new SimpleMarkerBalloon("garbage"))
-                                        .icon(Icon.Factory.fromResources(getApplicationContext(), R.drawable.smallkutty));
-                                tomtomMap.addMarker(markerBuilder);
-                                Log.e("latt", "" + lat);
-                            }
-                        });
+    private void initiClickListener() {
+        addGarbage.setOnClickListener(this);
+        setGarbage.setOnClickListener(this);
+        addDriver.setOnClickListener(this);
+        showData.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        if (id == R.id.addgarbage) {
+            askPermissionLocation();
+            temp = 1;
+            Toast.makeText(getApplicationContext(), "Silahkan pindahkan marker ke lokasi TPS!", Toast.LENGTH_LONG).show();
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                    LatLng latLng = new LatLng(latitude, longitude);
+                    if (count == 0) {
+                        //                         int height = 100;
+                        //                         int width = 100;
+                        //                         BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.gar);
+                        //                         Bitmap b=bitmapdraw.getBitmap();
+                        //                         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                        MarkerBuilder markerBuilder = new MarkerBuilder(latLng).decal(true).draggable(true)
+                                .markerBalloon(new SimpleMarkerBalloon("trash"))
+                                .iconAnchor(MarkerAnchor.Bottom);
+                        tom.addMarker(markerBuilder);
                         count++;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
+                    Log.e("latt", String.valueOf(latitude));
+                    Log.e("long", String.valueOf(longitude));
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                }
+            };
+
+            //LatLng latLng=new LatLng(13.0827,80.2707);]
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    2000,
+                    10, locationListener);
+        } else if (id == R.id.setgarbage) {
+            if (AdminActivity.latitude != 0 && AdminActivity.longitude != 0) {
+                if (temp == 1) {
+                    insertvalues(AdminActivity.latitude, AdminActivity.longitude);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Click the ADD GARBAGE first", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        requestQueue.add(jsonArrayRequest);
+        } else if (id == R.id.adddriver) {
+            Intent intent = new Intent(AdminActivity.this, AddDriver.class);
+            startActivity(intent);
+        } else if (id == R.id.showdata) {
+            Intent intent = new Intent(AdminActivity.this, ListTrashActivity.class);
+            startActivity(intent);
+        }
     }
 
+    private void askPermissionLocation() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) { // Level 23
+            int permissonFineLocation = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            int permissonCoarseLocation = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
 
-    private void insertvalues(double latitude, double longitude) {
-        String url = "http://fundevelopers.website/TomTom/garbage.php";
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+            if (permissonFineLocation != PackageManager.PERMISSION_GRANTED && permissonCoarseLocation != PackageManager.PERMISSION_GRANTED) {
+                // If don't have permission so prompt the user.
+                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_REQUEST_CODE_PERMISSION_FINE_LOCATION);
+                this.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_REQUEST_CODE_PERMISSION_COARSE_LOCATION);
+                return;
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("lat", String.valueOf(latitude));
-                params.put("long", String.valueOf(longitude));
-                return params;
-            }
-        };
-        requestQueue.add(stringRequest);
+        }
     }
 
     @Override
@@ -245,13 +180,13 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
         this.tom = tomtomMap;
         tom.clear();
         tom.setMyLocationEnabled(true);
-        addgarbage(tomtomMap);
+        getTrash(tomtomMap);
         getlocation(tomtomMap);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    Toast.makeText(getApplicationContext(), "Click the garbage to delete", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Pilih TPS yang akan dihapus!", Toast.LENGTH_SHORT).show();
                     tom.addOnMarkerClickListener(AdminActivity.this);
                 } else {
                     tom.removeOnMarkerClickListener(AdminActivity.this);
@@ -280,43 +215,16 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onMarkerClick(@NonNull Marker marker) {
-//        Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
+        //        Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder1 = new AlertDialog.Builder(AdminActivity.this);
-        builder1.setMessage("Are you sure you want to delete the garbage ?");
+        builder1.setMessage("Yakin mau menghapus TPS " + marker.getTag() + " ?");
         builder1.setCancelable(true);
         builder1.setPositiveButton(
                 "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // String username1= PeopleLogin.username1;
-                        String latitude = String.valueOf(marker.getPosition().getLatitude());
-                        String longitude = String.valueOf(marker.getPosition().getLongitude());
-                        RequestQueue requestQueue = Volley.newRequestQueue(AdminActivity.this);
-                        String url = "http://fundevelopers.website/TomTom/Removedriver.php";
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-                                recreate();
-                                checkBox.setChecked(false);
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-
-                            }
-                        }) {
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                Map<String, String> params = new HashMap<String, String>();
-                                params.put("latitude", latitude);
-                                params.put("longitude", longitude);
-                                return params;
-                            }
-                        };
-                        requestQueue.add(stringRequest);
+                        onDeleteTrash(marker.getTag().toString());
                         dialog.cancel();
-
                     }
                 });
 
@@ -330,7 +238,24 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
 
         AlertDialog alert11 = builder1.create();
         alert11.show();
+    }
 
+    public void onDeleteTrash(String trashId) {
+        if (dbTrash != null) {
+            dbTrash.child("trashes")
+                    .child(trashId)
+                    .removeValue()
+                    .addOnSuccessListener(new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            Toast.makeText(AdminActivity.this, "TPS Berhasil Dihapus", Toast.LENGTH_SHORT).show();
+                            recreate();
+                            checkBox.setChecked(false);
+                        }
+                    })
+                    .addOnFailureListener(this, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
+            ;
+        }
     }
 
     private void getlocation(TomtomMap tomtomMap) {
@@ -367,9 +292,7 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         };
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+        askPermissionLocation();
 
         //LatLng latLng=new LatLng(13.0827,80.2707);]
 
@@ -379,4 +302,73 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
+    private void getTrash(TomtomMap tomtomMap) {
+        dbTrash.child("trashes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    DataTrash trash = snapshot.child("data").getValue(DataTrash.class);
+                    trash.setId(snapshot.getKey());
+                    Double latitude = trash.getLatitude();
+                    Double longitude = trash.getLongitude();
+                    //String string=new String();
+                    AdminActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            LatLng latLng = new LatLng(latitude, longitude);
+                            // markerBuilder = new MarkerBuilder(latLng).markerBalloon(new SimpleMarkerBalloon("Trash : " + trash.getId()))
+                            markerBuilder = new MarkerBuilder(latLng)
+                                    .icon(Icon.Factory.fromResources(getApplicationContext(), R.drawable.smallkutty))
+                                    .markerBalloon(new SimpleMarkerBalloon("trash : " + trash.getId())).tag(trash.getId());
+                            tomtomMap.addMarker(markerBuilder);
+                            Log.e("latt", "" + latitude);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Toast.makeText(getApplicationContext(), "Gagal memuat, cobalah periksa koneksi internet anda", Toast.LENGTH_SHORT).show();
+                Log.e("MyListActivity", databaseError.getDetails() + " " + databaseError.getMessage());
+            }
+        });
+    }
+
+    private void insertvalues(double latitude, double longitude) {
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("ddMMyyHHSS", Locale.getDefault());
+        String trashId = df.format(c);
+        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, 0, false, "Undefined");
+        dbTrash.child("trashes").child("TR-" + trashId).child("data").setValue(dataTrash)
+                .addOnSuccessListener(this, new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        Toast.makeText(AdminActivity.this, "TPS telah ditambahkan!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(this, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onBackPressed() {
+        LatLng latLng = new LatLng(-7.1352807, 108.2417008);
+        if (count1 == 0) {
+            tom.centerOn(
+                    latLng.getLatitude(), latLng.getLongitude(),
+                    3.0,
+                    MapConstants.ORIENTATION_NORTH);
+            count1++;
+        } else {
+            // Intent intent = new Intent(AdminActivity.this, MainActivity.class);
+            // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // startActivity(intent);
+            finish();
+        }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
 }

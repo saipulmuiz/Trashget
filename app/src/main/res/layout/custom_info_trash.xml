@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheetContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_sheet_view"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="16dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="10dp"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/tv_title_trash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trash Id : "
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.github.lzyzsd.circleprogress.CircleProgress
+            android:id="@+id/capacity"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+            app:circle_finished_color="@color/blue_700"
+            app:circle_progress="20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_trash" />
+
+        <TextView
+            android:id="@+id/trashid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="Trash Id : "
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/capacity"
+            app:layout_constraintTop_toTopOf="@+id/capacity" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Lokasi : "
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/trashid"
+            app:layout_constraintTop_toBottomOf="@+id/trashid" />
+
+        <TextView
+            android:id="@+id/tv_location_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sindangherang"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_location"
+            app:layout_constraintStart_toEndOf="@+id/tv_location"
+            app:layout_constraintTop_toTopOf="@+id/tv_location" />
+
+        <TextView
+            android:id="@+id/tv_gas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Kadar Gas : "
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tv_location"
+            app:layout_constraintTop_toBottomOf="@+id/tv_location" />
+
+        <TextView
+            android:id="@+id/tv_gas_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5 Mol"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_gas"
+            app:layout_constraintStart_toEndOf="@+id/tv_gas"
+            app:layout_constraintTop_toTopOf="@+id/tv_gas" />
+
+        <ImageView
+            android:id="@+id/img_organic"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/icons8_organic_food_35px"
+            app:layout_constraintStart_toStartOf="@+id/tv_gas"
+            app:layout_constraintTop_toBottomOf="@+id/tv_gas" />
+
+        <TextView
+            android:id="@+id/tv_organic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:text="100 %"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/img_organic"
+            app:layout_constraintStart_toEndOf="@+id/img_organic"
+            app:layout_constraintTop_toTopOf="@+id/img_organic" />
+
+        <ImageView
+            android:id="@+id/img_anorganic"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="20dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/icons8_message_in_green_bottle_35px"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_organic"
+            app:layout_constraintStart_toEndOf="@+id/tv_organic"
+            app:layout_constraintTop_toTopOf="@+id/tv_organic" />
+
+        <TextView
+            android:id="@+id/tv_anorganic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:text="100 %"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/img_anorganic"
+            app:layout_constraintStart_toEndOf="@+id/img_anorganic"
+            app:layout_constraintTop_toTopOf="@+id/img_anorganic" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

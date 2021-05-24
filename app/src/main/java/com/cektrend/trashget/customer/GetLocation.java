@@ -1,8 +1,7 @@
-package com.cektrend.trashget.people;
+package com.cektrend.trashget.customer;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,8 +9,6 @@ import android.location.LocationManager;
 import android.os.Vibrator;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,9 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.cektrend.trashget.Interface.MultiMarker;
-import com.cektrend.trashget.MainActivity;
 import com.cektrend.trashget.R;
-import com.google.gson.JsonObject;
 import com.tomtom.online.sdk.common.location.LatLng;
 import com.tomtom.online.sdk.map.Icon;
 import com.tomtom.online.sdk.map.MapConstants;
@@ -40,17 +35,10 @@ import com.tomtom.online.sdk.map.TomtomMap;
 import com.tomtom.online.sdk.map.TomtomMapCallback;
 import com.tomtom.online.sdk.search.OnlineSearchApi;
 import com.tomtom.online.sdk.search.SearchApi;
-import com.tomtom.online.sdk.search.data.reversegeocoder.ReverseGeocoderSearchQuery;
-import com.tomtom.online.sdk.search.data.reversegeocoder.ReverseGeocoderSearchQueryBuilder;
-import com.tomtom.online.sdk.search.data.reversegeocoder.ReverseGeocoderSearchResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
 
 import static com.tomtom.online.sdk.map.MapConstants.DEFAULT_ZOOM_LEVEL;
 

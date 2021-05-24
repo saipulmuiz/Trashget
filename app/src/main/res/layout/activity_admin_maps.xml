@@ -7,8 +7,8 @@
     tools:context=".admin.AdminActivity">
 
     <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.tomtom.online.sdk.map.MapFragment"
+        android:id="@+id/admin_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,7 +22,8 @@
         android:id="@+id/floatingActionMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu_animationDelayPerItem="35"
@@ -76,41 +77,4 @@
             app:fab_label="Show Data"
             app:fab_size="mini" />
     </com.github.clans.fab.FloatingActionMenu>
-
-    <CheckBox
-        android:id="@+id/checkremove"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="15dp"
-        android:checked="false"
-        android:text="Remove garbage"
-        android:textColor="@color/blue_500"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <!--<Button-->
-    <!--android:id="@+id/garbage"-->
-    <!--android:layout_marginTop="50dp"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:text="Add Garbage"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content" />-->
-    <!--<Button-->
-    <!--android:id="@+id/setgarbage"-->
-    <!--android:layout_marginTop="150dp"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:text="set Garbage"-->
-
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content" />-->
-    <!--<Button-->
-    <!--android:id="@+id/adddriver"-->
-    <!--android:text="Add driver"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_marginTop="250dp"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content" />-->
-
 </androidx.constraintlayout.widget.ConstraintLayout>
