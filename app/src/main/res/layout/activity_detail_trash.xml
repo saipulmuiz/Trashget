@@ -209,7 +209,7 @@
                     android:id="@+id/btn_edit"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginVertical="15dp"
                     android:text="Ubah Data"
                     android:textColor="@color/white"
                     android:textSize="18sp"

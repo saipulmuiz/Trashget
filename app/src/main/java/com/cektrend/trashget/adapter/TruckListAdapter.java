@@ -71,7 +71,6 @@ public class TruckListAdapter extends RecyclerView.Adapter<com.cektrend.trashget
             @Override
             public void onClick(View v) {
                 if (track != null) {
-                    // Toast.makeText(context, truckList.getId() + " track di klik!", Toast.LENGTH_SHORT).show();
                     track.track(truckList.getId());
                 }
             }
@@ -79,11 +78,9 @@ public class TruckListAdapter extends RecyclerView.Adapter<com.cektrend.trashget
         viewHolder.btnNotify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // String username = viewHolder.head.getText().toString();
-                // if (nameValue != null) {
-                //     nameValue.notifyme(username);
-                // }
-                Toast.makeText(context, truckList.getId() + " notifyme di klik!", Toast.LENGTH_SHORT).show();
+                if (nameValue != null) {
+                    nameValue.notifyMe(truckList.getId());
+                }
             }
         });
     }

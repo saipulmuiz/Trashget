@@ -66,15 +66,15 @@
             app:cornerRadius="5dp"
             app:passwordToggleEnabled="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="5dp"
-            android:text="Forgot Password"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:textStyle="italic|bold" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="end"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:text="Forgot Password"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="15sp"-->
+<!--            android:textStyle="italic|bold" />-->
 
         <Button
             android:id="@+id/btn_login"

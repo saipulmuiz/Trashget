@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="15dp"
     android:layout_marginBottom="20dp"
     app:dragEdge="right"
     app:mode="normal">
@@ -50,27 +52,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_rounded_main_card"
-            android:elevation="10dp"
-            android:padding="15dp">
+            android:paddingVertical="15dp">
+
+            <CheckBox
+                android:id="@+id/check_tracking"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:buttonTint="@color/blue_500"
+                android:checked="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.github.lzyzsd.circleprogress.CircleProgress
                 android:id="@+id/capacity"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_marginStart="10dp"
                 app:circle_finished_color="@color/blue_700"
                 app:circle_progress="20"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/check_tracking"
                 app:layout_constraintTop_toBottomOf="@+id/tv_trash" />
 
             <TextView
                 android:id="@+id/trashid"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="Trash Id : "
-                android:textSize="15sp"
+                android:text="Trash Id : TR-2105212227"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/capacity"
                 app:layout_constraintTop_toTopOf="@+id/capacity" />
 
@@ -86,10 +97,11 @@
 
             <TextView
                 android:id="@+id/tv_location_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Sindangherang"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_location"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_location"
                 app:layout_constraintTop_toTopOf="@+id/tv_location" />
 
@@ -158,7 +170,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/img_anorganic"
                 app:layout_constraintStart_toEndOf="@+id/img_anorganic"
                 app:layout_constraintTop_toTopOf="@+id/img_anorganic" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

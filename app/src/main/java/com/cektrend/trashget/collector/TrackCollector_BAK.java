@@ -30,21 +30,21 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.common.collect.ImmutableMap;
-import com.tomtom.online.sdk.data.SpeedToConsumptionMap;
-import com.tomtom.online.sdk.routing.RoutingApi;
-import com.tomtom.online.sdk.routing.data.RouteQuery;
-import com.tomtom.online.sdk.routing.data.RouteQueryBuilder;
-import com.tomtom.online.sdk.routing.data.RouteResponse;
-import com.tomtom.online.sdk.routing.data.VehicleEngineType;
+// import com.google.common.collect.ImmutableMap;
+// import com.tomtom.online.sdk.data.SpeedToConsumptionMap;
+// import com.tomtom.online.sdk.routing.RoutingApi;
+// import com.tomtom.online.sdk.routing.data.RouteQuery;
+// import com.tomtom.online.sdk.routing.data.RouteQueryBuilder;
+// import com.tomtom.online.sdk.routing.data.RouteResponse;
+// import com.tomtom.online.sdk.routing.data.VehicleEngineType;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
+// import io.reactivex.android.schedulers.AndroidSchedulers;
+// import io.reactivex.observers.DisposableSingleObserver;
+// import io.reactivex.schedulers.Schedulers;
 
 import static com.cektrend.trashget.utils.ConstantUtil.TRASH_ID;
 

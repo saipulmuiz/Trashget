@@ -1,5 +1,5 @@
 package com.cektrend.trashget.Interface;
 
 public interface MultiMarker {
-    void getmarker(double latitude,double longitude);
+    void getMarker(double latitude,double longitude);
 }

@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -47,36 +49,43 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import static com.cektrend.trashget.utils.ConstantUtil.MY_REQUEST_CODE_PERMISSION_COARSE_LOCATION;
+import static com.cektrend.trashget.utils.ConstantUtil.MY_REQUEST_CODE_PERMISSION_FINE_LOCATION;
 import static com.cektrend.trashget.utils.ConstantUtil.TRASH_ID;
 
 public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener, View.OnClickListener {
     private GoogleMap mMap;
-    private static final int MY_REQUEST_CODE_PERMISSION_FINE_LOCATION = 1000;
-    private static final int MY_REQUEST_CODE_PERMISSION_COARSE_LOCATION = 2000;
     int count = 0;
     int count2 = 0;
     int temp = 0;
     static double latitude = 0, longitude = 0;
     int count1 = 0;
     Vibrator vibrator;
-    FloatingActionButton addGarbage, setGarbage, addDriver, showData;
+    FloatingActionButton addGarbage, setGarbage;
     DatabaseReference dbTrash;
     MarkerOptions markerOptions;
     DataTrash dataTrash;
     BottomSheetDialog bottomSheetDialog;
+    Bitmap icon;
+    List<Address> addresses;
+    Geocoder geocoder;
+    String bask, city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_maps);
         dbTrash = FirebaseDatabase.getInstance().getReference();
+        geocoder = new Geocoder(this, Locale.getDefault());
         initComponents();
         initiClickListener();
     }
@@ -85,8 +94,6 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         addGarbage = findViewById(R.id.addgarbage);
         setGarbage = findViewById(R.id.setgarbage);
-        addDriver = findViewById(R.id.adddriver);
-        showData = findViewById(R.id.showdata);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.admin_map);
         if (mapFragment != null) {
@@ -103,8 +110,6 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
     private void initiClickListener() {
         addGarbage.setOnClickListener(this);
         setGarbage.setOnClickListener(this);
-        addDriver.setOnClickListener(this);
-        showData.setOnClickListener(this);
     }
 
     @Override
@@ -116,7 +121,7 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
         }
         mMap.setMyLocationEnabled(true);
         getTrash(googleMap);
-        getlocation(googleMap);
+        getLocation(googleMap);
         mMap.setOnMarkerClickListener(AdminMapsActivity.this);
         mMap.setOnMarkerDragListener(this);
     }
@@ -131,11 +136,18 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
                     trash.setId(snapshot.getKey());
                     Double latitude = trash.getLatitude();
                     Double longitude = trash.getLongitude();
+                    int overallCapacityTrash = (trash.getOrganicCapacity() + trash.getAnorganicCapacity()) / 2;
                     AdminMapsActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             LatLng latLng = new LatLng(latitude, longitude);
-                            Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.smallkutty);
+                            if (overallCapacityTrash >= 0 && overallCapacityTrash < 50) {
+                                icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.trash_empty_30);
+                            } else if (overallCapacityTrash > 50 && overallCapacityTrash < 80) {
+                                icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.trash_warn_30);
+                            } else if (overallCapacityTrash > 80) {
+                                icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.trash_full_30);
+                            }
                             markerOptions = new MarkerOptions()
                                     .position(latLng)
                                     .icon(BitmapDescriptorFactory.fromBitmap(icon))
@@ -154,7 +166,7 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
         });
     }
 
-    private void getlocation(GoogleMap googleMap) {
+    private void getLocation(GoogleMap googleMap) {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             @Override
@@ -171,6 +183,9 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
 
         askPermissionLocation();
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                 2000,
                 10, locationListener);
@@ -205,23 +220,20 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
                 }
             };
 
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                     2000,
                     10, locationListener);
         } else if (id == R.id.setgarbage) {
             if (AdminMapsActivity.latitude != 0 && AdminMapsActivity.longitude != 0) {
                 if (temp == 1) {
-                    insertvalues(AdminMapsActivity.latitude, AdminMapsActivity.longitude);
+                    insertValues(AdminMapsActivity.latitude, AdminMapsActivity.longitude);
                 } else {
                     Toast.makeText(getApplicationContext(), "Click the ADD GARBAGE first", Toast.LENGTH_SHORT).show();
                 }
             }
-        } else if (id == R.id.adddriver) {
-            Intent intent = new Intent(AdminMapsActivity.this, AddDriver.class);
-            startActivity(intent);
-        } else if (id == R.id.showdata) {
-            Intent intent = new Intent(AdminMapsActivity.this, ListTrashActivity.class);
-            startActivity(intent);
         }
     }
 
@@ -237,11 +249,22 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
         return true;
     }
 
-    private void insertvalues(double latitude, double longitude) {
+    private void insertValues(double latitude, double longitude) {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("ddMMyyHHSS", Locale.getDefault());
         String trashId = df.format(c);
-        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, 0, false, "Undefined");
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && addresses.size() > 0) {
+                String address = addresses.get(0).getAddressLine(0);
+                city = addresses.get(0).getLocality();
+                String[] split = address.split(",");
+                bask = split[1];
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, 0, false, bask);
         dbTrash.child("trashes").child("TR-" + trashId).child("data").setValue(dataTrash)
                 .addOnSuccessListener(this, new OnSuccessListener() {
                     @Override

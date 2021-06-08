@@ -44,12 +44,6 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.0'
     implementation 'com.github.clans:fab:1.6.4'
 
-    // Tomtom maps
-    implementation 'com.tomtom.online:sdk-maps:2.282'
-    implementation 'com.tomtom.online:sdk-routing:2.282'
-    implementation 'com.tomtom.online:sdk-search:2.282'
-    implementation 'com.tomtom.online:sdk-maps-ui-extensions:2.282'
-
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:28.0.1')
     implementation 'com.google.firebase:firebase-core:19.0.0'
@@ -65,6 +59,12 @@ dependencies {
     // Google Maps
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation('com.github.jd-alexander:library:1.1.0')
+
+    // Tomtom Maps
+    implementation 'com.tomtom.online:sdk-maps:2.4807'
+    implementation 'com.tomtom.online:sdk-routing:2.4807'
+    implementation 'com.tomtom.online:sdk-search:2.4807'
+    implementation 'com.tomtom.online:sdk-maps-ui-extensions:2.4807'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu_animationDelayPerItem="35"
-        app:menu_backgroundColor="@color/transparent"
+        app:menu_backgroundColor="@android:color/transparent"
         app:menu_buttonSpacing="0dp"
         app:menu_colorNormal="@color/blue_500"
         app:menu_colorPressed="@color/blue_700"

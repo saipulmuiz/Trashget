@@ -2,6 +2,7 @@ package com.cektrend.trashget.collector;
 
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -55,15 +56,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, TomtomMapCallback.OnMarkerClickListener {
+import static com.cektrend.trashget.utils.ConstantUtil.MY_REQUEST_CODE_PERMISSION_COARSE_LOCATION;
+import static com.cektrend.trashget.utils.ConstantUtil.MY_REQUEST_CODE_PERMISSION_FINE_LOCATION;
+
+public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, TomtomMapCallback.OnMarkerClickListener, View.OnClickListener {
     TomtomMap tom;
     int count2 = 0;
-    Button bt, bt1;
-    TextView textView, textView1, textView2;
+    private TextView tvDistance, tvTime, tvArrdep, tvConsumption;
+    private Button btnAlternateRoute;
     static LatLng start, stop;
     double latitude, longitude;
     //    Button bt2;
-    Geocoder geocoder;
     MarkerBuilder basket;
     private SearchApi searchApi;
     private RoutingApi routePlannerAPI;
@@ -74,10 +77,9 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
     private Route route;
     List<LatLng> list;
     Marker marker;
+    Geocoder geocoder;
     List<Address> addresses;
-    private LatLng departurePosition;
-    private LatLng destinationPosition;
-    private LatLng wayPointPosition;
+    private LatLng departurePosition, destinationPosition;
     private Icon departureIcon;
     static String bask, user;
     private Icon destinationIcon;
@@ -86,24 +88,19 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_truck);
-        //bt2=findViewById(R.id.com);
-        textView = findViewById(R.id.distance);
-        textView1 = findViewById(R.id.arrdep);
-        textView2 = findViewById(R.id.consumption);
-        //starttrack=findViewById(R.id.starttracking);
-
         geocoder = new Geocoder(this, Locale.getDefault());
-        bt1 = findViewById(R.id.bt1);
-        //bt = findViewById(R.id.bt);
-
+        tvDistance = findViewById(R.id.tv_distance);
+        tvArrdep = findViewById(R.id.tv_arrdep);
+        tvConsumption = findViewById(R.id.tv_consumption);
+        btnAlternateRoute = findViewById(R.id.btn_alternate_route);
         initTomTomServices();
         initUIViews();
         setupUIViewListeners();
-
-
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(getIntent().getIntExtra("notif_id", 0));
     }
 
-    private void displayfuelvalue() {
+    private void displayFuelValue() {
         RouteQuery queryBuilder = RouteQueryBuilder.create(start, stop)
                 .withConsiderTraffic(false)
                 .withMaxAlternatives(2)
@@ -134,7 +131,7 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
                     @Override
                     public void onSuccess(RouteResponse routeResponse) {
                         Log.e("res", routeResponse.toString());
-                        displayfuel(routeResponse.getRoutes());
+                        displayFuel(routeResponse.getRoutes());
                         ////displayInfoAboutRoute(routeResponse);
                         //                    tom.displayRoutesOverview();
                     }
@@ -145,23 +142,21 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
                         clearMap();
                     }
                 });
-
     }
 
-    private void displayfuel(List<FullRoute> routes) {
+    private void displayFuel(List<FullRoute> routes) {
         for (FullRoute fullRoute : routes) {
             if (count2 == 0) {
                 String s = String.valueOf(fullRoute.getSummary().getFuelConsumptionInLiters());
-                textView2.setText("Consumption:  " + s + " Litres");
+                tvConsumption.setText("Consumption:  " + s + " Litres");
                 count2++;
-
                 Log.e("ss", s);
             }
         }
     }
 
     private void initTomTomServices() {
-        MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
+        MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.track_truck_map);
         mapFragment.getAsyncMap(this);
         searchApi = OnlineSearchApi.create(this);
         routePlannerAPI = OnlineRoutingApi.create(this);
@@ -190,7 +185,7 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
     public void onMapReady(@NonNull final TomtomMap tomtomMap) {
         tom = tomtomMap;
         tom.clear();
-        getbasket();
+        getBasket();
         tom.getUiSettings().getZoomingControlsView().show();
         //addgarbage(tomtomMap);
         tom.addOnMarkerClickListener(this);
@@ -204,63 +199,33 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
         //});
         Toast.makeText(this, "Please wait for routing", Toast.LENGTH_SHORT).show();
         balloon = new SimpleMarkerBalloon("Welcome to TomTom");
-        bt1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                RouteQuery routeQuery = new RouteQueryBuilder(start, stop).withMaxAlternatives(1)
-                        .withReport(Report.EFFECTIVE_SETTINGS)
-                        .withInstructionsType(InstructionsType.TEXT)
-                        .withConsiderTraffic(false).build();
-                routePlannerAPI.planRoute(routeQuery)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new DisposableSingleObserver<RouteResponse>() {
-                            @Override
-                            public void onSuccess(RouteResponse routeResponse) {
-                                displayRoutes(routeResponse.getRoutes());
-                                tomtomMap.displayRoutesOverview();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                handleApiError(e);
-
-                            }
-                        });
-
-            }
-        });
+        btnAlternateRoute.setOnClickListener(this);
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
-
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 start = new LatLng(latitude, longitude);
-
                 try {
-                    addresses = geocoder.getFromLocation(start.getLatitude(), start.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                    String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    addresses = geocoder.getFromLocation(start.getLatitude(), start.getLongitude(), 1);
+                    String address = addresses.get(0).getAddressLine(0);
                     String city = addresses.get(0).getLocality();
                     String[] split = address.split(",");
                     user = split[1];
                     //basket.markerBalloon(new SimpleMarkerBalloon(address+"\n"+city));
                     if (TrackTruck.user != null && TrackTruck.bask != null) {
-                        textView1.setText("" + TrackTruck.user + " to" + TrackTruck.bask);
+                        tvArrdep.setText("" + TrackTruck.user + " to " + TrackTruck.bask);
                     }
                     Log.e("address", address);
                     if (count == 0) {
                         basket = new MarkerBuilder(start)
                                 .markerBalloon(new SimpleMarkerBalloon(address + "\n" + city))
                                 .tag("basket")
-
                                 .decal(true);
                         tom.addMarker(basket);
                         distance(latitude, longitude, stop.getLatitude(), stop.getLongitude());
-                        displayfuelvalue();
+                        displayFuelValue();
                         Routing(start, stop);
                         count++;
                     } else {
@@ -273,7 +238,6 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
                         //   Routing(start,stop);
                         distance(latitude, longitude, stop.getLatitude(), stop.getLongitude());
                     }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -294,38 +258,31 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
 
             }
         };
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-
-        //LatLng latLng=new LatLng(13.0827,80.2707);]
-
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                 2000,
                 10, locationListener);
-
-
     }
 
-    void getbasket() {
+    void getBasket() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            String latitude1 = bundle.getString("lat");
-            String longitude1 = bundle.getString("lang");
+            double latitude1 = bundle.getDouble("lat");
+            double longitude1 = bundle.getDouble("long");
             //tomtomMap.clear();
-            latitude2 = Double.parseDouble(latitude1);
-            longitude2 = Double.parseDouble(longitude1);
-            stop = new LatLng(latitude2, longitude2);
-            LatLng latLng = new LatLng(stop.getLatitude(), stop.getLongitude());
+            stop = new LatLng(latitude1, longitude1);
             try {
-                addresses = geocoder.getFromLocation(latLng.getLatitude(), latLng.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                addresses = geocoder.getFromLocation(latitude1, longitude1, 1);
+                String address = addresses.get(0).getAddressLine(0);
                 String city = addresses.get(0).getLocality();
                 //basket.markerBalloon(new SimpleMarkerBalloon(address+"\n"+b
                 String[] split = address.split(",");
+                // Log.e("TAG", "split : " + split);
+                // Log.e("TAG", "split[0] : " + split[0]);
+                // Log.e("TAG", "split[1] : " + split[1]);
                 bask = split[1];
-
                 Log.e("address", address);
                 basket = new MarkerBuilder(stop)
                         .markerBalloon(new SimpleMarkerBalloon(address + "\n" + city))
@@ -333,26 +290,16 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
                         .tag("basket")
                         .decal(true);
                 tom.addMarker(basket);
-
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        this.tom.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void displayRoutes(List<FullRoute> routes) {
         for (FullRoute fullRoute : routes) {
             route = tom.addRoute(new RouteBuilder(
-                    fullRoute.getCoordinates()).startIcon(departureIcon).endIcon(destinationIcon).isActive(true));
+                    fullRoute.getCoordinates()).startIcon(departureIcon).endIcon(destinationIcon));
         }
     }
 
@@ -377,7 +324,7 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
         dist = dist * 60 * 1.1515;
         Double d = new Double(dist);
         int k = d.intValue();
-        textView.setText("" + k + "km");
+        tvDistance.setText("" + k + " km");
         Log.e("distance", "" +
                 k + "km");
     }
@@ -409,6 +356,34 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
                         clearMap();
                     }
                 });
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        if (id == R.id.btn_alternate_route) {
+            RouteQuery routeQuery = new RouteQueryBuilder(start, stop).withMaxAlternatives(1)
+                    .withReport(Report.EFFECTIVE_SETTINGS)
+                    .withInstructionsType(InstructionsType.TEXT)
+                    .withConsiderTraffic(false).build();
+            routePlannerAPI.planRoute(routeQuery)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableSingleObserver<RouteResponse>() {
+                        @Override
+                        public void onSuccess(RouteResponse routeResponse) {
+                            displayRoutes(routeResponse.getRoutes());
+                            tom.displayRoutesOverview();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            handleApiError(e);
+
+                        }
+                    });
+
+        }
     }
     //    protected void displayInfoAboutRoute(FullRoute routeResult) {
     //

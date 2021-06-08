@@ -22,11 +22,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tomtom.online.sdk.common.location.LatLng;
-import com.tomtom.online.sdk.map.Icon;
-import com.tomtom.online.sdk.map.MarkerBuilder;
-import com.tomtom.online.sdk.map.SimpleMarkerBalloon;
-
 import static com.cektrend.trashget.utils.ConstantUtil.TRASH_ID;
 
 public class DetailTrashActivity extends AppCompatActivity {

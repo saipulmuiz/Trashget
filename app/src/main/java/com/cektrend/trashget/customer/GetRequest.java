@@ -1,7 +1,9 @@
 package com.cektrend.trashget.customer;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,9 +30,12 @@ import com.cektrend.trashget.adapter.TruckListAdapter;
 import com.cektrend.trashget.Interface.NameValue;
 import com.cektrend.trashget.R;
 import com.cektrend.trashget.Track;
+import com.cektrend.trashget.admin.AdminMapsActivity;
+import com.cektrend.trashget.collector.TrackCollector;
 import com.cektrend.trashget.collector.TrackTruck;
 import com.cektrend.trashget.data.DataTrash;
 import com.cektrend.trashget.data.TruckList;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +47,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.cektrend.trashget.utils.ConstantUtil.MY_REQUEST_CODE_PERMISSION_COARSE_LOCATION;
+import static com.cektrend.trashget.utils.ConstantUtil.MY_REQUEST_CODE_PERMISSION_FINE_LOCATION;
+
 public class GetRequest extends AppCompatActivity implements Track, NameValue, SwipeRefreshLayout.OnRefreshListener {
     List<TruckList> listCollector = new ArrayList<>();
     RecyclerView recyclerView;
@@ -48,7 +57,7 @@ public class GetRequest extends AppCompatActivity implements Track, NameValue, S
     private RecyclerView.LayoutManager layoutManager;
     Button bt;
     List list1;
-    public static String latitude, longitude;
+    public static Double latitude, longitude;
     TruckListAdapter adapter;
     ArrayList<String> arrayList = new ArrayList<String>();
     DatabaseReference dbTrash;
@@ -109,15 +118,14 @@ public class GetRequest extends AppCompatActivity implements Track, NameValue, S
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataTrash trash = dataSnapshot.child("data").getValue(DataTrash.class);
                 if (trash != null) {
-                    // String[] split = response.split(",");
-                    String latitude = trash.getLatitude().toString();
-                    String longitude = trash.getLongitude().toString();
-                    Intent intent = new Intent(GetRequest.this, TrackTruck.class);
-                    intent.putExtra("lat", latitude);
-                    intent.putExtra("lang", longitude);
-                    startActivity(intent);
+                    latitude = trash.getLatitude();
+                    longitude = trash.getLongitude();
+                    if (ActivityCompat.checkSelfPermission(GetRequest.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(GetRequest.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        askPermissionLocation();
+                        return;
+                    }
+                    trackTrash();
                 }
-                // Log.e("TAG", "latitude : " + latitude);
             }
 
             @Override
@@ -125,60 +133,51 @@ public class GetRequest extends AppCompatActivity implements Track, NameValue, S
                 Log.e("MyListActivity", databaseError.getDetails() + " " + databaseError.getMessage());
             }
         });
-        //   Log.e("iiii",""+i);
-        // RequestQueue requestQueue = Volley.newRequestQueue(this);
-        // String url = "http://192.168.137.1/php/tracktruck.php";
-        // StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-        //     @Override
-        //     public void onResponse(String response) {
-        //         String[] split = response.split(",");
-        //         String latitude = split[0];
-        //         String longitude = split[1];
-        //         Intent intent = new Intent(GetRequest.this, TrackTruck.class);
-        //         intent.putExtra("lat", latitude);
-        //         intent.putExtra("lang", longitude);
-        //         startActivity(intent);
-        //     }
-        // }, new Response.ErrorListener() {
-        //     @Override
-        //     public void onErrorResponse(VolleyError error) {
-        //     }
-        // }) {
-        //     @Override
-        //     protected Map<String, String> getParams() throws AuthFailureError {
-        //         Map<String, String> params = new HashMap<String, String>();
-        //         params.put("name", name);
-        //         return params;
-        //     }
-        // };
-        // requestQueue.add(stringRequest);
     }
 
     @Override
-    public void notifyme(String username) {
-        String[] split = username.split(":");
-        String username1 = split[1];
-        Log.e("userr", username1);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "http://fundevelopers.website/TomTom/statusupdate.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_REQUEST_CODE_PERMISSION_FINE_LOCATION) {// Note: If request is cancelled, the result arrays are empty.
+            // Permissions granted (CALL_PHONE).
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(GetRequest.this, "Permission granted!", Toast.LENGTH_SHORT).show();
+                trackTrash();
+            } else {
+                Toast.makeText(GetRequest.this, "Permission denied!", Toast.LENGTH_SHORT).show();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }
+    }
+
+    private void trackTrash() {
+        Intent intent = new Intent(GetRequest.this, TrackTruck.class);
+        intent.putExtra("lat", latitude);
+        intent.putExtra("long", longitude);
+        startActivity(intent);
+    }
+
+    @Override
+    public void notifyMe(String idCustomer) {
+        dbTrash.child("customers").child(idCustomer).child("data").child("status").setValue(1)
+                .addOnSuccessListener(this, new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        Toast.makeText(GetRequest.this, "Tps telah ditandai!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(this, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void askPermissionLocation() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) { // Level 23
+            int permissonFineLocation = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            int permissonCoarseLocation = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+            if (permissonFineLocation != PackageManager.PERMISSION_GRANTED && permissonCoarseLocation != PackageManager.PERMISSION_GRANTED) {
+                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_REQUEST_CODE_PERMISSION_FINE_LOCATION);
+                this.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_REQUEST_CODE_PERMISSION_COARSE_LOCATION);
             }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("name", username1);
-                return params;
-            }
-        };
-        requestQueue.add(stringRequest);
+        }
     }
 
     private void showDialog() {

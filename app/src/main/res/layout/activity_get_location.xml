@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".customer.GetLocation">
     <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.tomtom.online.sdk.map.MapFragment"
+        android:id="@+id/get_location_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

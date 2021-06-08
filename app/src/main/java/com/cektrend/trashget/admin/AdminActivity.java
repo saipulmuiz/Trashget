@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.cektrend.trashget.R;
+import com.cektrend.trashget.customer.GetRequest;
 import com.cektrend.trashget.data.DataTrash;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tomtom.online.sdk.common.location.LatLng;
+import com.tomtom.online.sdk.map.CameraPosition;
 import com.tomtom.online.sdk.map.Icon;
 import com.tomtom.online.sdk.map.MapConstants;
 import com.tomtom.online.sdk.map.MapFragment;
@@ -43,12 +47,15 @@ import com.tomtom.online.sdk.map.SimpleMarkerBalloon;
 import com.tomtom.online.sdk.map.TomtomMap;
 import com.tomtom.online.sdk.map.TomtomMapCallback;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static com.tomtom.online.sdk.map.MapConstants.DEFAULT_ZOOM_LEVEL;
+
 
 public class AdminActivity extends AppCompatActivity implements OnMapReadyCallback, TomtomMapCallback.OnMarkerClickListener, View.OnClickListener {
     private static final int MY_REQUEST_CODE_PERMISSION_FINE_LOCATION = 1000;
@@ -58,14 +65,17 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
     int count2 = 0;
     int temp = 0;
     static double latitude = 0, longitude = 0;
+    MarkerBuilder markerBuilder;
     //Button bt,bt1;
     int count1 = 0;
     //int count2=0;
-    MarkerBuilder markerBuilder;
     Vibrator vibrator;
     CheckBox checkBox;
     FloatingActionButton addGarbage, setGarbage, addDriver, showData;
     DatabaseReference dbTrash;
+    Geocoder geocoder;
+    List<Address> addresses;
+    static String bask, user;
 
 
     @Override
@@ -73,6 +83,7 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
         dbTrash = FirebaseDatabase.getInstance().getReference();
+        geocoder = new Geocoder(this, Locale.getDefault());
         initComponents();
         initiClickListener();
     }
@@ -141,13 +152,16 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
             };
 
             //LatLng latLng=new LatLng(13.0827,80.2707);]
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                     2000,
                     10, locationListener);
         } else if (id == R.id.setgarbage) {
             if (AdminActivity.latitude != 0 && AdminActivity.longitude != 0) {
                 if (temp == 1) {
-                    insertvalues(AdminActivity.latitude, AdminActivity.longitude);
+                    insertValues(AdminActivity.latitude, AdminActivity.longitude);
                 } else {
                     Toast.makeText(getApplicationContext(), "Click the ADD GARBAGE first", Toast.LENGTH_SHORT).show();
                 }
@@ -156,7 +170,9 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
             Intent intent = new Intent(AdminActivity.this, AddDriver.class);
             startActivity(intent);
         } else if (id == R.id.showdata) {
-            Intent intent = new Intent(AdminActivity.this, ListTrashActivity.class);
+            // Intent intent = new Intent(AdminActivity.this, ListTrashActivity.class);
+            // startActivity(intent);
+            Intent intent = new Intent(AdminActivity.this, GetRequest.class);
             startActivity(intent);
         }
     }
@@ -181,7 +197,7 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
         tom.clear();
         tom.setMyLocationEnabled(true);
         getTrash(tomtomMap);
-        getlocation(tomtomMap);
+        getLocation(tomtomMap);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -215,29 +231,39 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onMarkerClick(@NonNull Marker marker) {
-        //        Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(AdminActivity.this);
-        builder1.setMessage("Yakin mau menghapus TPS " + marker.getTag() + " ?");
-        builder1.setCancelable(true);
-        builder1.setPositiveButton(
-                "Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        onDeleteTrash(marker.getTag().toString());
-                        dialog.cancel();
-                    }
-                });
-
-        builder1.setNegativeButton(
-                "No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
+        try {
+            addresses = geocoder.getFromLocation(marker.getPosition().getLatitude(), marker.getPosition().getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            String city = addresses.get(0).getLocality();
+            String[] split = address.split(",");
+            user = split[1];
+            Toast.makeText(this, split[0], Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // //        Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
+        // AlertDialog.Builder builder1 = new AlertDialog.Builder(AdminActivity.this);
+        // builder1.setMessage("Yakin mau menghapus TPS " + marker.getTag() + " ?");
+        // builder1.setCancelable(true);
+        // builder1.setPositiveButton(
+        //         "Yes",
+        //         new DialogInterface.OnClickListener() {
+        //             public void onClick(DialogInterface dialog, int id) {
+        //                 onDeleteTrash(marker.getTag().toString());
+        //                 dialog.cancel();
+        //             }
+        //         });
+        //
+        // builder1.setNegativeButton(
+        //         "No",
+        //         new DialogInterface.OnClickListener() {
+        //             public void onClick(DialogInterface dialog, int id) {
+        //                 dialog.cancel();
+        //             }
+        //         });
+        //
+        // AlertDialog alert11 = builder1.create();
+        // alert11.show();
     }
 
     public void onDeleteTrash(String trashId) {
@@ -258,7 +284,7 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
-    private void getlocation(TomtomMap tomtomMap) {
+    private void getLocation(TomtomMap tomtomMap) {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             @Override
@@ -270,7 +296,10 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
                 LatLng latLng = new LatLng(latitude, longitude);
                 if (count2 == 0) {
                     if (latitude1 != null) {
-                        tomtomMap.centerOn(latLng.getLatitude(), latLng.getLongitude(), DEFAULT_ZOOM_LEVEL, MapConstants.ORIENTATION_NORTH);
+                        tomtomMap.centerOn(CameraPosition.builder()
+                                .focusPosition(latLng)
+                                .zoom(DEFAULT_ZOOM_LEVEL)
+                                .bearing(MapConstants.ORIENTATION_NORTH_WEST).build());
                         count2++;
                     }
                 }
@@ -296,6 +325,9 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
 
         //LatLng latLng=new LatLng(13.0827,80.2707);]
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                 2000,
                 10, locationListener);
@@ -335,7 +367,7 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
         });
     }
 
-    private void insertvalues(double latitude, double longitude) {
+    private void insertValues(double latitude, double longitude) {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("ddMMyyHHSS", Locale.getDefault());
         String trashId = df.format(c);
@@ -345,6 +377,7 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
                     @Override
                     public void onSuccess(Object o) {
                         Toast.makeText(AdminActivity.this, "TPS telah ditambahkan!", Toast.LENGTH_SHORT).show();
+                        count = 0;
                     }
                 })
                 .addOnFailureListener(this, error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
@@ -354,10 +387,10 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
     public void onBackPressed() {
         LatLng latLng = new LatLng(-7.1352807, 108.2417008);
         if (count1 == 0) {
-            tom.centerOn(
-                    latLng.getLatitude(), latLng.getLongitude(),
-                    3.0,
-                    MapConstants.ORIENTATION_NORTH);
+            tom.centerOn(CameraPosition.builder()
+                    .focusPosition(latLng)
+                    .zoom(DEFAULT_ZOOM_LEVEL)
+                    .bearing(MapConstants.ORIENTATION_NORTH_WEST).build());
             count1++;
         } else {
             // Intent intent = new Intent(AdminActivity.this, MainActivity.class);

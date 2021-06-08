@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu_animationDelayPerItem="35"
-        app:menu_backgroundColor="@color/transparent"
+        app:menu_backgroundColor="@android:color/transparent"
         app:menu_buttonSpacing="0dp"
         app:menu_colorNormal="@color/blue_500"
         app:menu_colorPressed="@color/blue_700"
@@ -50,13 +50,6 @@
         app:menu_showShadow="false">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/adddriver"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_label="Add Driver"
-            app:fab_size="mini" />
-
-        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/setgarbage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,13 +61,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_label="Add Garbage"
-            app:fab_size="mini" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/showdata"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_label="Show Data"
             app:fab_size="mini" />
     </com.github.clans.fab.FloatingActionMenu>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,19 +1,20 @@
 package com.cektrend.trashget.data;
 
-public class TruckList {
-    private String id, body, name, phone;
+public class DataCustomer {
+    private String id, name, phone;
     private  Double latitude, longitude;
+    private Integer status;
 
-    public TruckList() {
+    public DataCustomer() {
     }
 
-    public TruckList(String id, String body, String name, String phone, Double latitude, Double longitude) {
+    public DataCustomer(String id, Integer status, String name, String phone, Double latitude, Double longitude) {
         this.id = id;
-        this.body = body;
         this.name = name;
         this.phone = phone;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.status = status;
     }
 
     public String getId() {
@@ -24,12 +25,12 @@ public class TruckList {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getName() {
