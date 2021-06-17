@@ -71,16 +71,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvUser = findViewById(R.id.tv_user);
         cvPemetaan = findViewById(R.id.cv_pemetaan);
         cvListTrash = findViewById(R.id.cv_list_trash);
-        cvCollecting = findViewById(R.id.cv_collecting);
-        cvCustomer = findViewById(R.id.cv_customer);
+        // cvCollecting = findViewById(R.id.cv_collecting);
+        // cvCustomer = findViewById(R.id.cv_customer);
         cvLogout = findViewById(R.id.cv_logout);
     }
 
     private void initListener() {
         cvPemetaan.setOnClickListener(this);
         cvListTrash.setOnClickListener(this);
-        cvCollecting.setOnClickListener(this);
-        cvCustomer.setOnClickListener(this);
+        // cvCollecting.setOnClickListener(this);
+        // cvCustomer.setOnClickListener(this);
         cvLogout.setOnClickListener(this);
     }
 
@@ -97,13 +97,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.cv_list_trash) {
             Intent toLisTrash = new Intent(MainActivity.this, ListTrashActivity.class);
             startActivity(toLisTrash);
-        } else if (id == R.id.cv_collecting) {
-            Intent toCollecting = new Intent(MainActivity.this, GetRequest.class);
-            startActivity(toCollecting);
-        } else if (id == R.id.cv_customer) {
-            // Intent toPemetaan = new Intent(MainActivity.this, AdminMapsActivity.class);
-            // startActivity(toPemetaan);
-            Toast.makeText(this, "Customer di klik!", Toast.LENGTH_SHORT).show();
+        // }
+        // else if (id == R.id.cv_collecting) {
+        //     Intent toCollecting = new Intent(MainActivity.this, GetRequest.class);
+        //     startActivity(toCollecting);
+        // } else if (id == R.id.cv_customer) {
+        //     // Intent toPemetaan = new Intent(MainActivity.this, AdminMapsActivity.class);
+        //     // startActivity(toPemetaan);
+        //     Toast.makeText(this, "Customer di klik!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.cv_logout) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setCancelable(false);

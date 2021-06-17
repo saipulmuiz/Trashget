@@ -69,30 +69,7 @@ public class NotificationService extends Service {
                     // }
                     DataTrash trash = snapshot.child("data").getValue(DataTrash.class);
                     trash.setId(snapshot.getKey());
-                    getNotif(trash, i);
-                    // if (notifications.length == 0) {
-                    //     getNotif(trash, i);
-                    // } else {
-                    //     for (StatusBarNotification notification : notifications) {
-                    //         Log.e("TAG", notification.getTag() + " = " + trash.getId());
-                    //         if (!notification.getTag().equals(trash.getId())) {
-                    //             getNotif(trash, i);
-                    //         }
-                    //     }
-                    // }
-                    // if (notifications.length == 0) {
-                    //     getNotif(trash, i);
-                    // } else {
-                    //
-                    // }
-                    // else {
-                    //     if (status2) {
-                    //         builder = helper.getNotification("Dust bin", "is cleaned");
-                    //         helper.getManager().notify(1, builder.build());
-                    //         startForeground(1, builder.build());
-                    //         status2 = false;
-                    //     }
-                    // }
+                    getNotification(trash, i);
                 }
             }
 
@@ -103,12 +80,12 @@ public class NotificationService extends Service {
         });
     }
 
-    private void getNotif(DataTrash trash, int i) {
+    private void getNotification(DataTrash trash, int i) {
         int overallCapacityTrash = (trash.getOrganicCapacity() + trash.getAnorganicCapacity()) / 2;
         if (trash.getFire()) {
             builder = helper.getNotificationIsFire(trash.getId(), " Segera padamkan!", trash.getLocation(), trash.getLatitude(), trash.getLongitude(), i);
             helper.getManager().notify(trash.getId(), i, builder.build());
-        } else if (overallCapacityTrash > 85) {
+        } else if (overallCapacityTrash > 80) {
             builder = helper.getNotificationTrashFull(trash.getId(), " Ayo bersihkan!", trash.getLocation(), trash.getLatitude(), trash.getLongitude(), i);
             helper.getManager().notify(trash.getId(), i, builder.build());
         }
