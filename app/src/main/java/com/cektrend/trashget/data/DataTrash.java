@@ -3,17 +3,20 @@ package com.cektrend.trashget.data;
 public class DataTrash {
     private String id;
     private String location;
-    private  Double latitude;
+    private Double latitude;
     private Double longitude;
     private Integer organicCapacity;
     private Integer anorganicCapacity;
-    private Integer kadarGas;
+    private Long kadarGas;
     private Boolean isFire;
+    private Boolean isNotif;
+    private Boolean fireNotif;
+    private Boolean isChecked;
 
-    public DataTrash(){
+    public DataTrash() {
     }
 
-    public DataTrash(Double latitude, Double longitude, Integer organicCapacity, Integer anorganicCapacity, Integer kadarGas, Boolean isFire, String location) {
+    public DataTrash(Double latitude, Double longitude, Integer organicCapacity, Integer anorganicCapacity, Long kadarGas, Boolean isFire, String location, Boolean isNotif, Boolean fireNotif, Boolean isChecked) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.organicCapacity = organicCapacity;
@@ -21,6 +24,9 @@ public class DataTrash {
         this.kadarGas = kadarGas;
         this.isFire = isFire;
         this.location = location;
+        this.isNotif = isNotif;
+        this.fireNotif = fireNotif;
+        this.isChecked = isChecked;
     }
 
     public String getId() {
@@ -63,11 +69,11 @@ public class DataTrash {
         this.anorganicCapacity = anorganicCapacity;
     }
 
-    public Integer getKadarGas() {
+    public Long getKadarGas() {
         return kadarGas;
     }
 
-    public void setKadarGas(Integer kadarGas) {
+    public void setKadarGas(Long kadarGas) {
         this.kadarGas = kadarGas;
     }
 
@@ -85,5 +91,29 @@ public class DataTrash {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public Boolean getNotif() {
+        return isNotif;
+    }
+
+    public void setNotif(Boolean notif) {
+        isNotif = notif;
+    }
+
+    public Boolean getFireNotif() {
+        return fireNotif;
+    }
+
+    public void setFireNotif(Boolean fireNotif) {
+        this.fireNotif = fireNotif;
+    }
+
+    public Boolean getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(Boolean isChecked) {
+        this.isChecked = isChecked;
     }
 }

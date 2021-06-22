@@ -50,6 +50,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -264,7 +265,7 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
         } catch (IOException e) {
             e.printStackTrace();
         }
-        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, 0, false, bask);
+        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, (long) 0, false, bask, true, true, false);
         dbTrash.child("trashes").child("TR-" + trashId).child("data").setValue(dataTrash)
                 .addOnSuccessListener(this, new OnSuccessListener() {
                     @Override

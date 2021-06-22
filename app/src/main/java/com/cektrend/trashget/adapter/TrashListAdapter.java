@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,13 +93,16 @@ public class TrashListAdapter extends RecyclerView.Adapter<TrashListAdapter.View
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.trashId.setText(new StringBuilder("Trash Id : " + listTrash.get(position).getId()));
         holder.tvLocation.setText(listTrash.get(position).getLocation());
-        holder.tvGas.setText(new StringBuilder(listTrash.get(position).getKadarGas() + " Mol"));
+        holder.tvGas.setText(new StringBuilder(listTrash.get(position).getKadarGas() + " ppm"));
         holder.tvOrganic.setText(new StringBuilder(listTrash.get(position).getOrganicCapacity() + " %"));
         holder.tvAnorganic.setText(new StringBuilder(listTrash.get(position).getAnorganicCapacity() + " %"));
         int overallCapacityTrash = (listTrash.get(position).getOrganicCapacity() + listTrash.get(position).getAnorganicCapacity()) / 2;
         holder.capacityOverall.setProgress(overallCapacityTrash);
         if (overallCapacityTrash == 100) {
             holder.capacityOverall.setFinishedColor(context.getResources().getColor(R.color.red));
+        }
+        if (listTrash.get(position).getIsChecked()) {
+            holder.checkTracking.setChecked(true);
         }
 
         holder.listItem.setOnClickListener(new View.OnClickListener() {
@@ -142,8 +146,10 @@ public class TrashListAdapter extends RecyclerView.Adapter<TrashListAdapter.View
                 if (isChecked) {
                     DataTrackingTrash trackingTrash = new DataTrackingTrash(listTrash.get(position).getId(), listTrash.get(position).getLatitude(), listTrash.get(position).getLongitude());
                     dbTrash.child("trackings").child(listTrash.get(position).getId()).setValue(trackingTrash);
+                    dbTrash.child("trashes").child(listTrash.get(position).getId()).child("data").child("isChecked").setValue(true);
                 } else {
                     dbTrash.child("trackings").child(listTrash.get(position).getId()).removeValue();
+                    dbTrash.child("trashes").child(listTrash.get(position).getId()).child("data").child("isChecked").setValue(false);
                 }
             }
         });

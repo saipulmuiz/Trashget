@@ -251,6 +251,11 @@ public class TrackTrash extends FragmentActivity implements OnMapReadyCallback, 
     void getBasket() {
         if (listTrackingTrash != null) {
             for (int i = 0; i < listTrackingTrash.size(); i++) {
+                // HashMap<String, Object> updateValues = new HashMap<>();
+                // updateValues.put("organicCapacity", 0);
+                // updateValues.put("anorganicCapacity", 0);
+                // updateValues.put("notif", true);
+                // dbTrash.child("trashes").child(listTrackingTrash.get(i).getId()).child("data").updateChildren(updateValues);
                 double latitude1 = listTrackingTrash.get(i).getLatitude();
                 double longitude1 = listTrackingTrash.get(i).getLongitude();
                 addWaypoint(new LatLng(latitude1, longitude1));

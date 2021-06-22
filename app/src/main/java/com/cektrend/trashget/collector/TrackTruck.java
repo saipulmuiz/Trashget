@@ -23,6 +23,8 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.cektrend.trashget.R;
 import com.google.common.collect.ImmutableMap;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.tomtom.online.sdk.common.location.LatLng;
 import com.tomtom.online.sdk.data.SpeedToConsumptionMap;
 import com.tomtom.online.sdk.map.Icon;
@@ -49,6 +51,7 @@ import com.tomtom.online.sdk.search.OnlineSearchApi;
 import com.tomtom.online.sdk.search.SearchApi;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,8 +59,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.cektrend.trashget.utils.ConstantUtil.MY_REQUEST_CODE_PERMISSION_COARSE_LOCATION;
-import static com.cektrend.trashget.utils.ConstantUtil.MY_REQUEST_CODE_PERMISSION_FINE_LOCATION;
+import static com.cektrend.trashget.utils.ConstantUtil.TRASH_ID;
 
 public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, TomtomMapCallback.OnMarkerClickListener, View.OnClickListener {
     TomtomMap tom;
@@ -83,6 +85,8 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
     private Icon departureIcon;
     static String bask, user;
     private Icon destinationIcon;
+    private String trashId;
+    DatabaseReference dbTrash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,11 +97,13 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
         tvArrdep = findViewById(R.id.tv_arrdep);
         tvConsumption = findViewById(R.id.tv_consumption);
         btnAlternateRoute = findViewById(R.id.btn_alternate_route);
+        dbTrash = FirebaseDatabase.getInstance().getReference();
         initTomTomServices();
         initUIViews();
         setupUIViewListeners();
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(getIntent().getIntExtra("notif_id", 0));
+        trashId = getIntent().getStringExtra(TRASH_ID);
     }
 
     private void displayFuelValue() {
@@ -348,6 +354,11 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
                         displayRoutes(routeResponse.getRoutes());
                         //displayInfoAboutRoute(routeResponse);
                         tom.displayRoutesOverview();
+                        // HashMap<String, Object> updateValues = new HashMap<>();
+                        // updateValues.put("organicCapacity", 0);
+                        // updateValues.put("anorganicCapacity", 0);
+                        // updateValues.put("notif", true);
+                        // dbTrash.child("trashes").child(trashId).child("data").updateChildren(updateValues);
                     }
 
                     @Override

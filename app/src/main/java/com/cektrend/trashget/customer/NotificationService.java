@@ -2,6 +2,7 @@ package com.cektrend.trashget.customer;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -9,11 +10,13 @@ import android.os.Build;
 import android.os.IBinder;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.cektrend.trashget.data.DataTrash;
 import com.cektrend.trashget.helpers.NotificationHelper;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NotificationService extends Service {
     Notification.Builder builder;
@@ -45,6 +50,7 @@ public class NotificationService extends Service {
             helper = new NotificationHelper(context);
         }
         checkStatus();
+
         // Handler handler = new Handler();
         // handler.postDelayed(new Runnable() {
         //     @Override
@@ -84,10 +90,16 @@ public class NotificationService extends Service {
         int overallCapacityTrash = (trash.getOrganicCapacity() + trash.getAnorganicCapacity()) / 2;
         if (trash.getFire()) {
             builder = helper.getNotificationIsFire(trash.getId(), " Segera padamkan!", trash.getLocation(), trash.getLatitude(), trash.getLongitude(), i);
-            helper.getManager().notify(trash.getId(), i, builder.build());
+            if (trash.getFireNotif()) {
+                helper.getManager().notify(trash.getId(), i, builder.build());
+            }
+            dbTrash.child("trashes").child(trash.getId()).child("data").child("fireNotif").setValue(false);
         } else if (overallCapacityTrash > 80) {
             builder = helper.getNotificationTrashFull(trash.getId(), " Ayo bersihkan!", trash.getLocation(), trash.getLatitude(), trash.getLongitude(), i);
-            helper.getManager().notify(trash.getId(), i, builder.build());
+            if (trash.getNotif()) {
+                helper.getManager().notify(trash.getId(), i, builder.build());
+            }
+            dbTrash.child("trashes").child(trash.getId()).child("data").child("notif").setValue(false);
         }
     }
 

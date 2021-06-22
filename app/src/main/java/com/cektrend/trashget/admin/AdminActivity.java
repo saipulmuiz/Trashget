@@ -48,6 +48,7 @@ import com.tomtom.online.sdk.map.TomtomMap;
 import com.tomtom.online.sdk.map.TomtomMapCallback;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -371,7 +372,7 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("ddMMyyHHSS", Locale.getDefault());
         String trashId = df.format(c);
-        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, 0, false, "Undefined");
+        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, (long) 0, false, "Undefined", true, true, false);
         dbTrash.child("trashes").child("TR-" + trashId).child("data").setValue(dataTrash)
                 .addOnSuccessListener(this, new OnSuccessListener() {
                     @Override

@@ -41,7 +41,7 @@ public class NotificationHelper extends ContextWrapper {
     @TargetApi(Build.VERSION_CODES.O)
     private void createChannelTrashFull() {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID_TRASH_FULL, CHANNEL_NAME_TRASH_FULL, NotificationManager.IMPORTANCE_HIGH);
-        channel.setDescription("Notifiksi TPS Penuh");
+        channel.setDescription("Notifikasi TPS Penuh");
         channel.enableLights(true);
         channel.enableVibration(true);
         channel.setLightColor(Color.GREEN);
@@ -77,6 +77,7 @@ public class NotificationHelper extends ContextWrapper {
         trackingTrashIntent.putExtra("lat", latitude);
         trackingTrashIntent.putExtra("long", longitude);
         trackingTrashIntent.putExtra("notif_id", notif_id);
+        trackingTrashIntent.putExtra(TRASH_ID, title);
         detailTrashIntent.putExtra(TRASH_ID, title);
         PendingIntent intentTrashList = PendingIntent.getActivity(this, 1, listTrashIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent intentDetailTrash = PendingIntent.getActivity(this, 2, detailTrashIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -95,7 +96,7 @@ public class NotificationHelper extends ContextWrapper {
                 .setContentIntent(intentDetailTrash)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(Notification.PRIORITY_HIGH)
-                .addAction(R.drawable.dump_truck, "Tracking", intentTrackingTrash)
+                .addAction(R.drawable.dump_truck, "Track & Clear", intentTrackingTrash)
                 .addAction(android.R.drawable.ic_menu_compass, "Show List Trash", intentTrashList);
     }
 

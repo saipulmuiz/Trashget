@@ -135,7 +135,7 @@ public class ListTrashActivity extends AppCompatActivity implements SwipeRefresh
                 hideDialog();
                 //Inisialisasi ArrayList
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.e("TAG", "snapshot : " + snapshot);
+                    // Log.e("TAG", "snapshot : " + snapshot);
                     DataTrash trash = snapshot.child("data").getValue(DataTrash.class);
                     trash.setId(snapshot.getKey());
                     dataTrash.add(trash);
@@ -179,7 +179,7 @@ public class ListTrashActivity extends AppCompatActivity implements SwipeRefresh
     @Override
     public void onRefresh() {
         showDataTrash();
-        dbTrash.child("trackings").removeValue();
+        // dbTrash.child("trackings").removeValue();
         tvCountTrash.setText(new StringBuilder("Tracking 0 Bak"));
         btnTracking.setText(new StringBuilder("Tracking (0)"));
     }
@@ -222,13 +222,13 @@ public class ListTrashActivity extends AppCompatActivity implements SwipeRefresh
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         onBackPressed();
-        dbTrash.child("trackings").removeValue();
+        // dbTrash.child("trackings").removeValue();
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        dbTrash.child("trackings").removeValue();
+        // dbTrash.child("trackings").removeValue();
         super.onBackPressed();
     }
 }
