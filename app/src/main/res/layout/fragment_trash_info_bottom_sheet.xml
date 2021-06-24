@@ -235,18 +235,6 @@
                         app:layout_constraintStart_toStartOf="@+id/img_api"
                         app:layout_constraintTop_toBottomOf="@+id/img_api" />
 
-                    <Button
-                        android:id="@+id/btn_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:layout_marginTop="15dp"
-                        android:text="Ubah Data"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        app:cornerRadius="5dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_deteksi_api" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.core.widget.NestedScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>

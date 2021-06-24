@@ -26,7 +26,6 @@ import static com.cektrend.trashget.utils.ConstantUtil.TRASH_ID;
 
 public class DetailTrashActivity extends AppCompatActivity {
     TextView tvTrash, tvLocation, tvGasvalue, tvDeteksiApi;
-    Button btnEdit;
     CircleProgress cpOrganik, cpAnorganik;
     ImageView imgApi;
     String trashId;
@@ -49,7 +48,6 @@ public class DetailTrashActivity extends AppCompatActivity {
         tvLocation = findViewById(R.id.tv_location);
         tvGasvalue = findViewById(R.id.tv_gas_value);
         tvDeteksiApi = findViewById(R.id.tv_deteksi_api);
-        btnEdit = findViewById(R.id.btn_edit);
         cpOrganik = findViewById(R.id.capacity_organic);
         cpAnorganik = findViewById(R.id.capacity_anorganic);
         imgApi = findViewById(R.id.img_api);

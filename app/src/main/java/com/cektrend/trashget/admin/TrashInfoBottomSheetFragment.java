@@ -47,7 +47,7 @@ import static com.cektrend.trashget.utils.ConstantUtil.TRASH_ID;
 
 public class TrashInfoBottomSheetFragment extends BottomSheetDialogFragment implements View.OnClickListener {
     TextView tvTrash, tvLocation, tvGasvalue, tvDeteksiApi;
-    Button btnEdit, btnBottomSheet;
+    Button btnBottomSheet;
     CircleProgress cpOrganik, cpAnorganik;
     ImageView imgApi;
     DatabaseReference dbTrash;
@@ -82,7 +82,6 @@ public class TrashInfoBottomSheetFragment extends BottomSheetDialogFragment impl
         tvLocation = view.findViewById(R.id.tv_location);
         tvGasvalue = view.findViewById(R.id.tv_gas_value);
         tvDeteksiApi = view.findViewById(R.id.tv_deteksi_api);
-        btnEdit = view.findViewById(R.id.btn_edit);
         cpOrganik = view.findViewById(R.id.capacity_organic);
         cpAnorganik = view.findViewById(R.id.capacity_anorganic);
         imgApi = view.findViewById(R.id.img_api);
