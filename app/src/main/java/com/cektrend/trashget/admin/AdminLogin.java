@@ -25,6 +25,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import static com.cektrend.trashget.utils.ConstantUtil.MY_SHARED_PREFERENCES;
 import static com.cektrend.trashget.utils.ConstantUtil.SESSION_NAME;
 import static com.cektrend.trashget.utils.ConstantUtil.SESSION_STATUS;
@@ -79,13 +82,13 @@ public class AdminLogin extends AppCompatActivity implements View.OnClickListene
         pDialog.setCancelable(false);
         pDialog.setMessage("Verifikasi...");
         showDialog();
-        dbTrash.child("admin").child(username).addValueEventListener(new ValueEventListener() {
+        dbTrash.child("admin").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 hideDialog();
-                DataAdmin admin = dataSnapshot.getValue(DataAdmin.class);
+                DataAdmin admin = dataSnapshot.child(username).getValue(DataAdmin.class);
                 if (admin != null) {
-                    if (admin.getPassword().equals(password)) {
+                    if (admin.getPassword().equals(md5(password))) {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(SESSION_STATUS, true);
                         editor.putString(SESSION_NAME, admin.getName());
@@ -108,6 +111,31 @@ public class AdminLogin extends AppCompatActivity implements View.OnClickListene
                 Log.e("MyListActivity", databaseError.getDetails() + " " + databaseError.getMessage());
             }
         });
+    }
+
+    public String md5(String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private void showDialog() {
