@@ -42,4 +42,16 @@
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="CenterOnCurrentLocationView" parent="BaseCenterOnCurrentLocationView">
+        <item name="android:layout_gravity">center|start</item>
+        <item name="android:layout_marginStart">@dimen/compass_default_margin_start</item>
+        <item name="android:layout_marginBottom">@dimen/current_location_default_margin_bottom</item>
+    </style>
+
+    <style name="CompassView" parent="BaseCompactView">
+        <item name="android:layout_gravity">top|start</item>
+        <item name="android:layout_marginStart">@dimen/compass_default_margin_start</item>
+        <item name="android:layout_marginTop">120dp</item>
+    </style>
 </resources>

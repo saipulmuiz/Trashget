@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,8 @@ import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -86,8 +89,8 @@ import timber.log.Timber;
 public class TrackTrash extends FragmentActivity implements OnMapReadyCallback, TomtomMapCallback.OnMarkerClickListener, View.OnClickListener {
     TomtomMap tom;
     int count2 = 0;
-    private TextView tvDistance, tvTime, tvArrdep, tvConsumption;
-    private Button btnAlternateRoute;
+    private TextView tvDistance, tvTime, tvOrigin, tvDestination, tvConsumption;
+    private ImageButton btnAlternateRoute;
     static LatLng start, stop;
     double latitude, longitude;
     protected Map<Long, com.tomtom.online.sdk.routing.route.information.FullRoute> routesMap = new LinkedHashMap<>();
@@ -122,7 +125,8 @@ public class TrackTrash extends FragmentActivity implements OnMapReadyCallback, 
         setContentView(R.layout.activity_track_truck);
         geocoder = new Geocoder(this, Locale.getDefault());
         tvDistance = findViewById(R.id.tv_distance);
-        tvArrdep = findViewById(R.id.tv_arrdep);
+        tvOrigin = findViewById(R.id.tv_origin);
+        tvDestination = findViewById(R.id.tv_destination);
         tvConsumption = findViewById(R.id.tv_consumption);
         btnAlternateRoute = findViewById(R.id.btn_alternate_route);
         dbTrash = FirebaseDatabase.getInstance().getReference();
@@ -195,7 +199,8 @@ public class TrackTrash extends FragmentActivity implements OnMapReadyCallback, 
                     user = split[1];
                     //basket.markerBalloon(new SimpleMarkerBalloon(address+"\n"+city));
                     if (TrackTrash.user != null && TrackTrash.bask != null) {
-                        tvArrdep.setText(new StringBuilder("" + TrackTrash.user + " to " + TrackTrash.bask));
+                        tvOrigin.setText(TrackTrash.user);
+                        tvDestination.setText(TrackTrash.bask);
                     }
                     // Log.e("address", address);
                     // if (count == 0) {
@@ -367,8 +372,9 @@ public class TrackTrash extends FragmentActivity implements OnMapReadyCallback, 
         Toast.makeText(this, "Jalur selesai dibuat!", Toast.LENGTH_SHORT).show();
         // viewModel.hideRoutingInProgressDialog();
         // displayFuel(routeResult);
-        tvConsumption.setText(new StringBuilder("+/- Konsumsi : " + routeResult.getSummary().getFuelConsumptionInLiters() + " Liter"));
-        tvDistance.setText(new StringBuilder("" + routeResult.getSummary().getLengthInMeters() / 1000 + " km"));
+        BigDecimal consumption = round(routeResult.getSummary().getFuelConsumptionInLiters(), 2);
+        tvDistance.setText(new StringBuilder(routeResult.getSummary().getLengthInMeters() / 1000 + " Km"));
+        tvConsumption.setText(new StringBuilder("(" + consumption + " Liter)"));
         tom.addOnRouteClickListener(onRouteClickListener);
     }
 
@@ -538,4 +544,10 @@ public class TrackTrash extends FragmentActivity implements OnMapReadyCallback, 
     //     List<Instruction> instructions = Arrays.asList(routeResult.getGuidance().getInstructions());
     //     Log.e("man", instructions.toString());
     // }
+
+    public static BigDecimal round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd;
+    }
 }

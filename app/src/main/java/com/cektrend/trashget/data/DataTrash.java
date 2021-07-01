@@ -12,11 +12,12 @@ public class DataTrash {
     private Boolean isNotif;
     private Boolean fireNotif;
     private Boolean isChecked;
+    private Integer tinggiBak;
 
     public DataTrash() {
     }
 
-    public DataTrash(Double latitude, Double longitude, Integer organicCapacity, Integer anorganicCapacity, Long kadarGas, Boolean isFire, String location, Boolean isNotif, Boolean fireNotif, Boolean isChecked) {
+    public DataTrash(Double latitude, Double longitude, Integer organicCapacity, Integer anorganicCapacity, Long kadarGas, Boolean isFire, String location, Boolean isNotif, Boolean fireNotif, Boolean isChecked, Integer tinggiBak) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.organicCapacity = organicCapacity;
@@ -27,6 +28,7 @@ public class DataTrash {
         this.isNotif = isNotif;
         this.fireNotif = fireNotif;
         this.isChecked = isChecked;
+        this.tinggiBak = tinggiBak;
     }
 
     public String getId() {
@@ -115,5 +117,13 @@ public class DataTrash {
 
     public void setIsChecked(Boolean isChecked) {
         this.isChecked = isChecked;
+    }
+
+    public Integer getTinggiBak() {
+        return tinggiBak;
+    }
+
+    public void setTinggiBak(Integer tinggiBak) {
+        this.tinggiBak = tinggiBak;
     }
 }

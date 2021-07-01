@@ -13,211 +13,240 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_detail_trash">
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="60dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/img_trash"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="320dp"-->
+            <!--                    android:layout_marginTop="16dp"-->
+            <!--                    android:contentDescription="@string/app_name"-->
+            <!--                    android:src="@drawable/trashget_icon"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+            <TextView
+                android:id="@+id/tv_trash"
                 android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:text="Bak Sampah : TR-001"
+                android:textAlignment="center"
+                android:textColor="#313131"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.455"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.github.lzyzsd.circleprogress.CircleProgress
+                android:id="@+id/capacity_organic"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="20dp"
+                app:circle_finished_color="@android:color/holo_green_light"
+                app:circle_progress="20"
+                app:layout_constraintEnd_toStartOf="@+id/capacity_anorganic"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_trash" />
+
+            <com.github.lzyzsd.circleprogress.CircleProgress
+                android:id="@+id/capacity_anorganic"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:circle_progress="30"
+                app:layout_constraintBottom_toBottomOf="@+id/capacity_organic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/capacity_organic"
+                app:layout_constraintTop_toTopOf="@+id/capacity_organic" />
+
+            <TextView
+                android:id="@+id/tv_title_organic"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical"
-                android:paddingHorizontal="20dp">
+                android:layout_marginTop="10dp"
+                android:text="Sampah Organik"
+                android:textColor="#313131"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/capacity_organic"
+                app:layout_constraintEnd_toStartOf="@+id/tv_title_anorganic"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/capacity_organic" />
 
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/img_trash"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="320dp"-->
-                <!--                    android:layout_marginTop="16dp"-->
-                <!--                    android:contentDescription="@string/app_name"-->
-                <!--                    android:src="@drawable/trashget_icon"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+            <TextView
+                android:id="@+id/tv_title_anorganic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sampah Anorganik"
+                android:textColor="#313131"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_title_organic"
+                app:layout_constraintEnd_toEndOf="@+id/capacity_anorganic"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/capacity_anorganic"
+                app:layout_constraintTop_toTopOf="@+id/tv_title_organic" />
 
-                <TextView
-                    android:id="@+id/tv_trash"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Bak Sampah : TR-001"
-                    android:textAlignment="center"
-                    android:textColor="#313131"
-                    android:textSize="21sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.455"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tv_title_trash"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:text="Info Bak Sampah"
+                android:textAlignment="center"
+                android:textColor="#313131"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.455"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_organic" />
 
-                <com.github.lzyzsd.circleprogress.CircleProgress
-                    android:id="@+id/capacity_organic"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_marginTop="20dp"
-                    app:circle_finished_color="@android:color/holo_green_light"
-                    app:circle_progress="20"
-                    app:layout_constraintEnd_toStartOf="@+id/capacity_anorganic"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_trash" />
+            <ImageView
+                android:id="@+id/img_location"
+                android:layout_width="26dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_baseline_location_on_24"
+                app:layout_constraintStart_toStartOf="@+id/tv_title_trash"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_trash" />
 
-                <com.github.lzyzsd.circleprogress.CircleProgress
-                    android:id="@+id/capacity_anorganic"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    app:circle_progress="30"
-                    app:layout_constraintBottom_toBottomOf="@+id/capacity_organic"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/capacity_organic"
-                    app:layout_constraintTop_toTopOf="@+id/capacity_organic" />
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:text="Lokasi : Sindangherang"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_location"
+                app:layout_constraintStart_toEndOf="@+id/img_gas"
+                app:layout_constraintTop_toTopOf="@+id/img_location" />
 
-                <TextView
-                    android:id="@+id/tv_title_organic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Sampah Organik"
-                    android:textColor="#313131"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/capacity_organic"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_title_anorganic"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/capacity_organic" />
+            <ImageView
+                android:id="@+id/img_gas"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icons8_gas_35px_1"
+                app:layout_constraintStart_toStartOf="@+id/img_location"
+                app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
-                <TextView
-                    android:id="@+id/tv_title_anorganic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sampah Anorganik"
-                    android:textColor="#313131"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_title_organic"
-                    app:layout_constraintEnd_toEndOf="@+id/capacity_anorganic"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="@+id/capacity_anorganic"
-                    app:layout_constraintTop_toTopOf="@+id/tv_title_organic" />
+            <TextView
+                android:id="@+id/tv_gas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:text="Kadar Gas : "
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_gas"
+                app:layout_constraintStart_toEndOf="@+id/img_gas"
+                app:layout_constraintTop_toTopOf="@+id/img_gas" />
 
-                <TextView
-                    android:id="@+id/tv_title_trash"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Info Bak Sampah"
-                    android:textAlignment="center"
-                    android:textColor="#313131"
-                    android:textSize="21sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.455"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_title_organic" />
+            <TextView
+                android:id="@+id/tv_gas_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="100"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_gas"
+                app:layout_constraintStart_toEndOf="@+id/tv_gas"
+                app:layout_constraintTop_toTopOf="@+id/tv_gas" />
 
-                <ImageView
-                    android:id="@+id/img_location"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="20dp"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_baseline_location_on_24"
-                    app:layout_constraintStart_toStartOf="@+id/tv_title_trash"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_title_trash" />
+            <ImageView
+                android:id="@+id/img_height"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_baseline_height_35"
+                app:layout_constraintStart_toStartOf="@+id/img_gas"
+                app:layout_constraintTop_toBottomOf="@+id/tv_gas" />
 
-                <TextView
-                    android:id="@+id/tv_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
-                    android:text="Lokasi : Sindangherang"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_location"
-                    app:layout_constraintStart_toEndOf="@+id/img_gas"
-                    app:layout_constraintTop_toTopOf="@+id/img_location" />
+            <TextView
+                android:id="@+id/tv_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:text="Ketinggian Bak : "
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_height"
+                app:layout_constraintStart_toEndOf="@+id/img_height"
+                app:layout_constraintTop_toTopOf="@+id/img_height" />
 
-                <ImageView
-                    android:id="@+id/img_gas"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="15dp"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/icons8_gas_35px_1"
-                    app:layout_constraintStart_toStartOf="@+id/img_location"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_location" />
+            <TextView
+                android:id="@+id/tv_height_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="100"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_height"
+                app:layout_constraintStart_toEndOf="@+id/tv_height"
+                app:layout_constraintTop_toTopOf="@+id/tv_height" />
 
-                <TextView
-                    android:id="@+id/tv_gas"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
-                    android:text="Kadar Gas : "
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_gas"
-                    app:layout_constraintStart_toEndOf="@+id/img_gas"
-                    app:layout_constraintTop_toTopOf="@+id/img_gas" />
+            <ImageView
+                android:id="@+id/img_api"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_baseline_local_fire_department_100"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_height" />
 
-                <TextView
-                    android:id="@+id/tv_gas_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="100"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_gas"
-                    app:layout_constraintStart_toEndOf="@+id/tv_gas"
-                    app:layout_constraintTop_toTopOf="@+id/tv_gas" />
+            <TextView
+                android:id="@+id/tv_deteksi_api"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Api Terdeteksi"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/img_api"
+                app:layout_constraintStart_toStartOf="@+id/img_api"
+                app:layout_constraintTop_toBottomOf="@+id/img_api" />
 
-                <ImageView
-                    android:id="@+id/img_api"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_baseline_local_fire_department_100"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/img_gas" />
-
-                <TextView
-                    android:id="@+id/tv_deteksi_api"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Api Terdeteksi"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="21sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/img_api"
-                    app:layout_constraintStart_toStartOf="@+id/img_api"
-                    app:layout_constraintTop_toBottomOf="@+id/img_api" />
-
-<!--                <Button-->
-<!--                    android:id="@+id/btn_edit"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="56dp"-->
-<!--                    android:layout_marginVertical="15dp"-->
-<!--                    android:text="Ubah Data"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:textSize="18sp"-->
-<!--                    app:cornerRadius="5dp"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/tv_deteksi_api" />-->
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <Button
+                android:id="@+id/btn_edit"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginVertical="15dp"
+                android:text="Edit Data"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:cornerRadius="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_deteksi_api" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

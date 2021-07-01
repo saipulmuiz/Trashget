@@ -142,9 +142,9 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
                         @Override
                         public void run() {
                             LatLng latLng = new LatLng(latitude, longitude);
-                            if (overallCapacityTrash >= 0 && overallCapacityTrash < 50) {
+                            if (overallCapacityTrash >= 0 && overallCapacityTrash <= 50) {
                                 icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.trash_empty_30);
-                            } else if (overallCapacityTrash > 50 && overallCapacityTrash < 80) {
+                            } else if (overallCapacityTrash > 50 && overallCapacityTrash <= 80) {
                                 icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.trash_warn_30);
                             } else if (overallCapacityTrash > 80) {
                                 icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.trash_full_30);
@@ -265,7 +265,7 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
         } catch (IOException e) {
             e.printStackTrace();
         }
-        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, (long) 0, false, bask, true, true, false);
+        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, (long) 0, false, bask, true, true, false, 0);
         dbTrash.child("trashes").child("TR-" + trashId).child("data").setValue(dataTrash)
                 .addOnSuccessListener(this, new OnSuccessListener() {
                     @Override

@@ -8,6 +8,8 @@ public class ConstantUtil {
     public static final String SESSION_USERNAME = "session_username";
     public static final String SESSION_NAME = "session_name";
     public static final String TRASH_ID = "trashId";
+    public static final String TRASH_LOCATION = "trash_location";
+    public static final String TRASH_HEIGHT = "trash_height";
     public static LatLng POINT_DEST = null;
     public static final int MY_REQUEST_CODE_PERMISSION_FINE_LOCATION = 1000;
     public static final int MY_REQUEST_CODE_PERMISSION_COARSE_LOCATION = 2000;

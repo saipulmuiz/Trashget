@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,8 +57,8 @@ import static com.cektrend.trashget.utils.ConstantUtil.TRASH_ID;
 public class TrackCollector extends FragmentActivity implements OnMapReadyCallback, LocationListener, GoogleMap.OnMarkerClickListener, RoutingListener, View.OnClickListener {
     private GoogleMap mMap = null;
     private LocationManager locationManager = null;
-    private TextView tvDistance, tvTime, tvArrdep;
-    private Button btnAlternateRoute;
+    private TextView tvDistance, tvConsumption, tvOrigin, tvDestination;
+    private ImageButton btnAlternateRoute;
 
     //Global UI Map markers
     private Marker basket = null;
@@ -90,11 +91,12 @@ public class TrackCollector extends FragmentActivity implements OnMapReadyCallba
 
     private void initComponents() {
         tvDistance = findViewById(R.id.tv_distance);
-        tvArrdep = findViewById(R.id.tv_arrdep);
-        tvTime = findViewById(R.id.tv_consumption);
+        tvOrigin = findViewById(R.id.tv_origin);
+        tvDestination = findViewById(R.id.tv_destination);
+        tvConsumption = findViewById(R.id.tv_consumption);
+        btnAlternateRoute = findViewById(R.id.btn_alternate_route);
         departureIcon = BitmapFactory.decodeResource(TrackCollector.this.getResources(), R.drawable.ic_map_route_departure);
         destinationIcon = BitmapFactory.decodeResource(TrackCollector.this.getResources(), R.drawable.ic_map_route_destination);
-        btnAlternateRoute = findViewById(R.id.btn_alternate_route);
         POINT_DEST = new LatLng(-7.1252805, 108.219001);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -173,7 +175,8 @@ public class TrackCollector extends FragmentActivity implements OnMapReadyCallba
                         String[] split = address.split(",");
                         user = split[1];
                         if (TrackCollector.user != null && TrackCollector.bask != null) {
-                            tvArrdep.setText(new StringBuilder("" + TrackCollector.user + " to" + TrackCollector.bask));
+                            tvOrigin.setText(TrackCollector.user);
+                            tvDestination.setText(TrackCollector.bask);
                         }
                         Log.e("address", address);
                         if (firstRefresh) {
@@ -263,8 +266,8 @@ public class TrackCollector extends FragmentActivity implements OnMapReadyCallba
             line = mMap.addPolyline(options);
 
             //Show distance and duration.
-            tvDistance.setText("Distance: " + list.get(0).getDistanceText());
-            tvTime.setText("Duration: " + list.get(0).getDurationText());
+            tvDistance.setText(new StringBuilder(list.get(0).getDistanceText() + " Km "));
+            tvConsumption.setText(new StringBuilder("(" + list.get(0).getDurationText() + ")"));
 
             //Focus on map bounds
             mMap.moveCamera(CameraUpdateFactory.newLatLng(list.get(0).getLatLgnBounds().getCenter()));

@@ -372,7 +372,7 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("ddMMyyHHSS", Locale.getDefault());
         String trashId = df.format(c);
-        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, (long) 0, false, "Undefined", true, true, false);
+        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, (long) 0, false, "Undefined", true, true, false, 0);
         dbTrash.child("trashes").child("TR-" + trashId).child("data").setValue(dataTrash)
                 .addOnSuccessListener(this, new OnSuccessListener() {
                     @Override
