@@ -12,12 +12,13 @@ public class DataTrash {
     private Boolean isNotif;
     private Boolean fireNotif;
     private Boolean isChecked;
-    private Integer tinggiBak;
+    private Integer tinggiBakOrganik;
+    private Integer tinggiBakAnorganik;
 
     public DataTrash() {
     }
 
-    public DataTrash(Double latitude, Double longitude, Integer organicCapacity, Integer anorganicCapacity, Long kadarGas, Boolean isFire, String location, Boolean isNotif, Boolean fireNotif, Boolean isChecked, Integer tinggiBak) {
+    public DataTrash(Double latitude, Double longitude, Integer organicCapacity, Integer anorganicCapacity, Long kadarGas, Boolean isFire, String location, Boolean isNotif, Boolean fireNotif, Boolean isChecked, Integer tinggiBakOrganik, Integer tinggiBakAnorganik) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.organicCapacity = organicCapacity;
@@ -28,7 +29,8 @@ public class DataTrash {
         this.isNotif = isNotif;
         this.fireNotif = fireNotif;
         this.isChecked = isChecked;
-        this.tinggiBak = tinggiBak;
+        this.tinggiBakOrganik = tinggiBakOrganik;
+        this.tinggiBakAnorganik = tinggiBakAnorganik;
     }
 
     public String getId() {
@@ -119,11 +121,19 @@ public class DataTrash {
         this.isChecked = isChecked;
     }
 
-    public Integer getTinggiBak() {
-        return tinggiBak;
+    public Integer getTinggiBakOrganik() {
+        return tinggiBakOrganik;
     }
 
-    public void setTinggiBak(Integer tinggiBak) {
-        this.tinggiBak = tinggiBak;
+    public void setTinggiBakOrganik(Integer tinggiBakOrganik) {
+        this.tinggiBakOrganik = tinggiBakOrganik;
+    }
+
+    public Integer getTinggiBakAnorganik() {
+        return tinggiBakAnorganik;
+    }
+
+    public void setTinggiBakAnorganik(Integer tinggiBakAnorganik) {
+        this.tinggiBakAnorganik = tinggiBakAnorganik;
     }
 }

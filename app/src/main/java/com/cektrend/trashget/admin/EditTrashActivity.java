@@ -20,17 +20,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.cektrend.trashget.utils.ConstantUtil.TRASH_HEIGHT;
+import static com.cektrend.trashget.utils.ConstantUtil.TRASH_HEIGHT_ANORGANIC;
+import static com.cektrend.trashget.utils.ConstantUtil.TRASH_HEIGHT_ORGANIC;
 import static com.cektrend.trashget.utils.ConstantUtil.TRASH_ID;
 import static com.cektrend.trashget.utils.ConstantUtil.TRASH_LOCATION;
 
 public class EditTrashActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView tvIdTrash;
-    private EditText edtTinggi, edtLocation;
+    private EditText edtTinggiOrganik, edtTinggiAnorganik, edtLocation;
     private Button btnSave;
     DatabaseReference dbTrash;
     private String idTrash, locationTrash;
-    private Integer heightTrash;
+    private Integer heightTrashOrganic, getHeightTrashAnorganic;
     private Toolbar toolbar;
 
     @Override
@@ -45,7 +46,8 @@ public class EditTrashActivity extends AppCompatActivity implements View.OnClick
 
     private void initComponents() {
         tvIdTrash = findViewById(R.id.tv_trash);
-        edtTinggi = findViewById(R.id.edt_tinggi);
+        edtTinggiOrganik = findViewById(R.id.edt_tinggi_organik);
+        edtTinggiAnorganik = findViewById(R.id.edt_tinggi_anorganik);
         edtLocation = findViewById(R.id.edt_location);
         btnSave = findViewById(R.id.btn_save);
         toolbar = findViewById(R.id.toolbar_edit_trash);
@@ -57,10 +59,12 @@ public class EditTrashActivity extends AppCompatActivity implements View.OnClick
     private void initValue() {
         idTrash = getIntent().getStringExtra(TRASH_ID);
         locationTrash = getIntent().getStringExtra(TRASH_LOCATION);
-        heightTrash = getIntent().getIntExtra(TRASH_HEIGHT, 0);
+        heightTrashOrganic = getIntent().getIntExtra(TRASH_HEIGHT_ORGANIC, 0);
+        getHeightTrashAnorganic = getIntent().getIntExtra(TRASH_HEIGHT_ANORGANIC, 0);
         tvIdTrash.setText(new StringBuilder("Bak Sampah : " + idTrash));
         edtLocation.setText(locationTrash);
-        edtTinggi.setText(String.valueOf(heightTrash));
+        edtTinggiOrganik.setText(String.valueOf(heightTrashOrganic));
+        edtTinggiAnorganik.setText(String.valueOf(getHeightTrashAnorganic));
     }
 
     @Override
@@ -68,10 +72,12 @@ public class EditTrashActivity extends AppCompatActivity implements View.OnClick
         int id = view.getId();
         if (id == R.id.btn_save) {
             String location = edtLocation.getText().toString();
-            Integer tinggi = Integer.valueOf(edtTinggi.getText().toString());
+            Integer tinggiOrganik = Integer.valueOf(edtTinggiOrganik.getText().toString());
+            Integer tinggiAnorganik = Integer.valueOf(edtTinggiAnorganik.getText().toString());
             Map<String, Object> updateTrash = new HashMap<>();
             updateTrash.put("location", location);
-            updateTrash.put("tinggiBak", tinggi);
+            updateTrash.put("tinggiBakOrganik", tinggiOrganik);
+            updateTrash.put("tinggiBakAnorganik", tinggiAnorganik);
             dbTrash.child("trashes").child(idTrash).child("data").updateChildren(updateTrash)
                     .addOnSuccessListener(this, new OnSuccessListener() {
                         @Override

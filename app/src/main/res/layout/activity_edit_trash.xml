@@ -37,13 +37,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_title_tinggi"
+                android:id="@+id/tv_title_tinggi_organik"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
-                android:text="Tinggi Bak"
+                android:text="T. Bak Organik"
                 android:textColor="@color/gray"
                 android:textSize="22sp"
                 android:textStyle="bold"
@@ -51,7 +51,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_trash" />
 
             <EditText
-                android:id="@+id/edt_tinggi"
+                android:id="@+id/edt_tinggi_organik"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="15dp"
@@ -60,10 +60,39 @@
                 android:paddingStart="10dp"
                 android:textColor="@color/black"
                 app:cornerRadius="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/tv_title_tinggi"
+                app:layout_constraintBottom_toBottomOf="@id/tv_title_tinggi_organik"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_title_tinggi"
-                app:layout_constraintTop_toTopOf="@id/tv_title_tinggi" />
+                app:layout_constraintStart_toEndOf="@id/tv_title_tinggi_organik"
+                app:layout_constraintTop_toTopOf="@id/tv_title_tinggi_organik" />
+
+            <TextView
+                android:id="@+id/tv_title_tinggi_anorganik"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="T. Bak Anorganik"
+                android:textColor="@color/gray"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_tinggi_organik" />
+
+            <EditText
+                android:id="@+id/edt_tinggi_anorganik"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="15dp"
+                android:background="@drawable/button"
+                android:inputType="number"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                app:cornerRadius="5dp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_title_tinggi_anorganik"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_title_tinggi_anorganik"
+                app:layout_constraintTop_toTopOf="@id/tv_title_tinggi_anorganik" />
 
             <TextView
                 android:id="@+id/tv_title_location"
@@ -75,8 +104,8 @@
                 android:textColor="@color/gray"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/tv_title_tinggi"
-                app:layout_constraintTop_toBottomOf="@id/tv_title_tinggi" />
+                app:layout_constraintStart_toStartOf="@+id/tv_title_tinggi_anorganik"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_tinggi_anorganik" />
 
             <EditText
                 android:id="@+id/edt_location"

@@ -265,7 +265,7 @@ public class AdminMapsActivity extends FragmentActivity implements OnMapReadyCal
         } catch (IOException e) {
             e.printStackTrace();
         }
-        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, (long) 0, false, bask, true, true, false, 0);
+        DataTrash dataTrash = new DataTrash(latitude, longitude, 0, 0, (long) 0, false, bask, true, true, false, 0, 0);
         dbTrash.child("trashes").child("TR-" + trashId).child("data").setValue(dataTrash)
                 .addOnSuccessListener(this, new OnSuccessListener() {
                     @Override

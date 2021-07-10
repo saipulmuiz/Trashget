@@ -409,7 +409,11 @@ public class TrackTrash extends FragmentActivity implements OnMapReadyCallback, 
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_alternate_route) {
-            displayRoute(getRouteSpecification());
+            if (start != null) {
+                displayRoute(getRouteSpecification());
+            } else {
+                Toast.makeText(this, "Tunggu sebentar, lokasi sedang diproses!", Toast.LENGTH_SHORT).show();
+            }
             // RouteQuery routeQuery = new RouteQueryBuilder(start, stop).withMaxAlternatives(1)
             //         .withReport(Report.EFFECTIVE_SETTINGS)
             //         .withInstructionsType(InstructionsType.TEXT)

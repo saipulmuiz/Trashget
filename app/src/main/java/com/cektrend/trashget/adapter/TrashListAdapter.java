@@ -145,10 +145,10 @@ public class TrashListAdapter extends RecyclerView.Adapter<TrashListAdapter.View
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     DataTrackingTrash trackingTrash = new DataTrackingTrash(listTrash.get(position).getId(), listTrash.get(position).getLatitude(), listTrash.get(position).getLongitude());
-                    dbTrash.child("trackings").child(listTrash.get(position).getId()).setValue(trackingTrash);
+                    dbTrash.child("trackings").child("data").child(listTrash.get(position).getId()).setValue(trackingTrash);
                     dbTrash.child("trashes").child(listTrash.get(position).getId()).child("data").child("isChecked").setValue(true);
                 } else {
-                    dbTrash.child("trackings").child(listTrash.get(position).getId()).removeValue();
+                    dbTrash.child("trackings").child("data").child(listTrash.get(position).getId()).removeValue();
                     dbTrash.child("trashes").child(listTrash.get(position).getId()).child("data").child("isChecked").setValue(false);
                 }
             }

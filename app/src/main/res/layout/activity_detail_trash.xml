@@ -177,7 +177,7 @@
                 app:layout_constraintTop_toTopOf="@+id/tv_gas" />
 
             <ImageView
-                android:id="@+id/img_height"
+                android:id="@+id/img_height_organik"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginTop="15dp"
@@ -187,29 +187,66 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_gas" />
 
             <TextView
-                android:id="@+id/tv_height"
+                android:id="@+id/tv_height_organik"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="10dp"
-                android:text="Ketinggian Bak : "
+                android:layout_marginStart="8dp"
+                android:text="Tinggi Bak Organik : "
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/img_height"
-                app:layout_constraintStart_toEndOf="@+id/img_height"
-                app:layout_constraintTop_toTopOf="@+id/img_height" />
+                app:layout_constraintBottom_toBottomOf="@+id/img_height_organik"
+                app:layout_constraintStart_toEndOf="@+id/img_height_organik"
+                app:layout_constraintTop_toTopOf="@+id/img_height_organik"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/tv_height_value"
+                android:id="@+id/tv_height_organik_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="100"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_height"
-                app:layout_constraintStart_toEndOf="@+id/tv_height"
-                app:layout_constraintTop_toTopOf="@+id/tv_height" />
+                app:layout_constraintBottom_toBottomOf="@+id/tv_height_organik"
+                app:layout_constraintStart_toEndOf="@+id/tv_height_organik"
+                app:layout_constraintTop_toTopOf="@+id/tv_height_organik" />
+
+            <ImageView
+                android:id="@+id/img_height_anorganik"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_baseline_height_35"
+                app:layout_constraintStart_toStartOf="@+id/img_height_organik"
+                app:layout_constraintTop_toBottomOf="@+id/tv_height_organik" />
+
+            <TextView
+                android:id="@+id/tv_height_anorganik"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:text="Tinggi Bak Anorganik : "
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_height_anorganik"
+                app:layout_constraintStart_toEndOf="@+id/img_height_anorganik"
+                app:layout_constraintTop_toTopOf="@+id/img_height_anorganik"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/tv_height_anorganik_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="100"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_height_anorganik"
+                app:layout_constraintStart_toEndOf="@+id/tv_height_anorganik"
+                app:layout_constraintTop_toTopOf="@+id/tv_height_anorganik" />
 
             <ImageView
                 android:id="@+id/img_api"
@@ -219,7 +256,7 @@
                 android:src="@drawable/ic_baseline_local_fire_department_100"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_height" />
+                app:layout_constraintTop_toBottomOf="@+id/img_height_anorganik" />
 
             <TextView
                 android:id="@+id/tv_deteksi_api"

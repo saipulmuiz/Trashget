@@ -374,27 +374,30 @@ public class TrackTruck extends FragmentActivity implements OnMapReadyCallback, 
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_alternate_route) {
-            RouteQuery routeQuery = new RouteQueryBuilder(start, stop).withMaxAlternatives(1)
-                    .withReport(Report.EFFECTIVE_SETTINGS)
-                    .withInstructionsType(InstructionsType.TEXT)
-                    .withConsiderTraffic(false).build();
-            routePlannerAPI.planRoute(routeQuery)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new DisposableSingleObserver<RouteResponse>() {
-                        @Override
-                        public void onSuccess(RouteResponse routeResponse) {
-                            displayRoutes(routeResponse.getRoutes());
-                            tom.displayRoutesOverview();
-                        }
+            if (start != null) {
+                RouteQuery routeQuery = new RouteQueryBuilder(start, stop).withMaxAlternatives(1)
+                        .withReport(Report.EFFECTIVE_SETTINGS)
+                        .withInstructionsType(InstructionsType.TEXT)
+                        .withConsiderTraffic(false).build();
+                routePlannerAPI.planRoute(routeQuery)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new DisposableSingleObserver<RouteResponse>() {
+                            @Override
+                            public void onSuccess(RouteResponse routeResponse) {
+                                displayRoutes(routeResponse.getRoutes());
+                                tom.displayRoutesOverview();
+                            }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            handleApiError(e);
+                            @Override
+                            public void onError(Throwable e) {
+                                handleApiError(e);
 
-                        }
-                    });
-
+                            }
+                        });
+            } else {
+                Toast.makeText(this, "Tunggu sebentar, lokasi sedang diproses!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
     //    protected void displayInfoAboutRoute(FullRoute routeResult) {

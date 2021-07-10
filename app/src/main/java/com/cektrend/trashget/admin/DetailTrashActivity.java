@@ -24,18 +24,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import static com.cektrend.trashget.utils.ConstantUtil.TRASH_HEIGHT;
+import static com.cektrend.trashget.utils.ConstantUtil.TRASH_HEIGHT_ANORGANIC;
+import static com.cektrend.trashget.utils.ConstantUtil.TRASH_HEIGHT_ORGANIC;
 import static com.cektrend.trashget.utils.ConstantUtil.TRASH_ID;
 import static com.cektrend.trashget.utils.ConstantUtil.TRASH_LOCATION;
 
 public class DetailTrashActivity extends AppCompatActivity {
-    TextView tvTrash, tvLocation, tvGasvalue, tvHeightValue, tvDeteksiApi;
+    TextView tvTrash, tvLocation, tvGasvalue, tvHeightOrganicValue, tvHeightAnorganicValue, tvDeteksiApi;
     CircleProgress cpOrganik, cpAnorganik;
     private Button btnEdit;
     ImageView imgApi;
     String trashId;
     String trashLocation;
-    Integer trashHeight;
+    Integer trashHeightOrganic, trashHeightAnorganic;
     private Toolbar toolbar;
     DatabaseReference dbTrash;
 
@@ -52,7 +53,8 @@ public class DetailTrashActivity extends AppCompatActivity {
             Intent toEdit = new Intent(this, EditTrashActivity.class);
             toEdit.putExtra(TRASH_ID, trashId);
             toEdit.putExtra(TRASH_LOCATION, trashLocation);
-            toEdit.putExtra(TRASH_HEIGHT, trashHeight);
+            toEdit.putExtra(TRASH_HEIGHT_ORGANIC, trashHeightOrganic);
+            toEdit.putExtra(TRASH_HEIGHT_ANORGANIC, trashHeightAnorganic);
             startActivity(toEdit);
         });
     }
@@ -62,7 +64,8 @@ public class DetailTrashActivity extends AppCompatActivity {
         tvLocation = findViewById(R.id.tv_location);
         tvGasvalue = findViewById(R.id.tv_gas_value);
         tvDeteksiApi = findViewById(R.id.tv_deteksi_api);
-        tvHeightValue = findViewById(R.id.tv_height_value);
+        tvHeightOrganicValue = findViewById(R.id.tv_height_organik_value);
+        tvHeightAnorganicValue = findViewById(R.id.tv_height_anorganik_value);
         cpOrganik = findViewById(R.id.capacity_organic);
         cpAnorganik = findViewById(R.id.capacity_anorganic);
         imgApi = findViewById(R.id.img_api);
@@ -84,12 +87,14 @@ public class DetailTrashActivity extends AppCompatActivity {
                 DataTrash trash = dataSnapshot.child("data").getValue(DataTrash.class);
                 if (trash != null) {
                     trashLocation = trash.getLocation();
-                    trashHeight = trash.getTinggiBak();
+                    trashHeightOrganic = trash.getTinggiBakOrganik();
+                    trashHeightAnorganic = trash.getTinggiBakAnorganik();
                     cpOrganik.setProgress(trash.getOrganicCapacity());
                     cpAnorganik.setProgress(trash.getAnorganicCapacity());
                     tvGasvalue.setText(String.valueOf(trash.getKadarGas()));
                     tvGasvalue.setText(new StringBuilder(trash.getKadarGas() + " ppm"));
-                    tvHeightValue.setText(new StringBuilder(trash.getTinggiBak() + " cm"));
+                    tvHeightOrganicValue.setText(new StringBuilder(trash.getTinggiBakOrganik() + " cm"));
+                    tvHeightAnorganicValue.setText(new StringBuilder(trash.getTinggiBakAnorganik() + " cm"));
                     tvLocation.setText(new StringBuilder("Lokasi : " + trash.getLocation()));
                     if (trash.getFire()) {
                         tvDeteksiApi.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
