@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -439,7 +440,7 @@ public class TrackTrash extends FragmentActivity implements OnMapReadyCallback, 
     }
 
     private void getTrackingTrash() {
-        dbTrash.child("trackings").addValueEventListener(new ValueEventListener() {
+        dbTrash.child("trackings").child("data").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 if (isClear) {
