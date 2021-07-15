@@ -98,7 +98,9 @@ public class TrashListAdapter extends RecyclerView.Adapter<TrashListAdapter.View
         holder.tvAnorganic.setText(new StringBuilder(listTrash.get(position).getAnorganicCapacity() + " %"));
         int overallCapacityTrash = (listTrash.get(position).getOrganicCapacity() + listTrash.get(position).getAnorganicCapacity()) / 2;
         holder.capacityOverall.setProgress(overallCapacityTrash);
-        if (overallCapacityTrash == 100) {
+        if (overallCapacityTrash >= 50 && overallCapacityTrash <= 80) {
+            holder.capacityOverall.setFinishedColor(context.getResources().getColor(R.color.yellow));
+        } else if (overallCapacityTrash > 80) {
             holder.capacityOverall.setFinishedColor(context.getResources().getColor(R.color.red));
         }
         if (listTrash.get(position).getIsChecked()) {
